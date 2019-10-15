@@ -1,0 +1,29 @@
+
+# Level 1
+# Courses
+
+START_LEVEL
+level_name:End Of Year
+ball_velocities:45,550 -45,550 -30,550 30,550
+background:image(background_images/end_of_year.jpg)
+paddle_speed:650
+paddle_width:160
+block_definitions:definitions/my_block_definitions.txt
+blocks_start_x:25
+blocks_start_y:80
+row_height:25
+num_blocks:78
+START_BLOCKS
+-
+-
+-
+-ooooooooooooo--
+-iiiiiiiiiiiii--
+-bbbbbbbbbbbbb--
+-lllllllllllll--
+-ddddddddddddd--
+-mmmmmmmmmmmmm--
+-
+-
+END_BLOCKS
+END_LEVEL
