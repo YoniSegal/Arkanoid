@@ -1,17 +1,7 @@
-package gamelogic;
+package levels;
 
-import gameobjects.Background;
-import gameobjects.Ball;
-import gameobjects.Block;
-import gameobjects.Collidable;
-import gameobjects.CountdownAnimation;
-import gameobjects.LevelIndicator;
-import gameobjects.LivesIndicator;
-import gameobjects.Paddle;
-import gameobjects.PauseScreen;
-import gameobjects.ScoreIndicator;
-import gameobjects.Sprite;
-import gameobjects.SpriteCollection;
+import gamelogic.*;
+import gameobjects.*;
 import geometry.Point;
 import biuoop.DrawSurface;
 import biuoop.GUI;
@@ -27,14 +17,14 @@ import java.util.List;
  * @author Yonatan Segal
  * @version 1
  */
-public class GameLevel implements HitNotifier, Animation {
+public class GameLevel implements Animation {
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 600;
     private static final int RECT_HEIGHT = 40;
     private static final int BORDER_GAP = 10;
     private int numOfBalls;
     private int paddleWidth;
-    private SpriteCollection sprites;
+    private VisitableCollection visitableCollection;
     private GameEnvironment environment;
     private GUI gui;
     private Counter blocksRemaining;
@@ -44,10 +34,10 @@ public class GameLevel implements HitNotifier, Animation {
     private Block deathRegion;
     private Block upperBlock;
     private Paddle paddle;
-    private List<HitListener> hitListeners = new ArrayList();
-    private AnimationRunner runner;
+    //    private List<HitListener> hitListeners = new ArrayList<>();
+//    private AnimationRunner runner;
     private boolean running;
-    private Ball[] balls;
+    private List<Ball> balls;
     private LevelInformation levelInformation;
     private Color countDownColour;
     private KeyboardSensor keyboardSensor;
@@ -64,7 +54,7 @@ public class GameLevel implements HitNotifier, Animation {
      * @param lives lives counter.
      */
     public GameLevel(LevelInformation li, KeyboardSensor ks, AnimationRunner ar, Counter score, Counter lives) {
-        this.sprites = new SpriteCollection();
+        this.visitableCollection = new VisitableCollection();
         this.environment = new GameEnvironment();
         this.levelInformation = li;
         this.keyboardSensor = ks;
@@ -133,29 +123,7 @@ public class GameLevel implements HitNotifier, Animation {
      * @param c Collidable.
      */
     public void removeCollidable(Collidable c) {
-        List<Collidable> collidables = this.environment.getCollidables();
-        for (Collidable collidable : collidables) {
-            collidables.remove(c);
-            return;
-        }
-    }
-
-    /**
-     * Method returns the block which removes balls from the game.
-     *
-     * @return Block.
-     */
-    public Block getDeathRegion() {
-        return deathRegion;
-    }
-
-    /**
-     * Method sets the score of a given level.
-     *
-     * @param points Counter.
-     */
-    public void setScore(Counter points) {
-        this.score = points;
+        this.environment.getCollidables().remove(c);
     }
 
     /**
@@ -176,52 +144,12 @@ public class GameLevel implements HitNotifier, Animation {
         return lives;
     }
 
-    /**
-     * Method adds a gameobjects.Sprite.
-     *
-     * @param s gameobjects.Sprite.
-     */
-    public void addSprite(Sprite s) {
-        this.sprites.addSprite(s);
+    public void addVisitable(Visitable visitable) {
+        this.visitableCollection.addVisitable(visitable);
     }
 
-    /**
-     * Method removes sprite from a game.
-     *
-     * @param s Sprite.
-     */
-    public void removeSprite(Sprite s) {
-        for (Sprite i : this.sprites.getSprites()) {
-            this.sprites.getSprites().remove(s);
-            return;
-        }
-    }
-
-    /**
-     * Method returns a SpriteCollection.
-     *
-     * @return SpriteColleciton.
-     */
-    public SpriteCollection getSprites() {
-        return this.sprites;
-    }
-
-    /**
-     * Add hl as a listener to hit events.
-     *
-     * @param hl GameLogic.HitListener.
-     */
-    public void addHitListener(HitListener hl) {
-        this.hitListeners.add(hl);
-    }
-
-    /**
-     * Remove hl from the list of listeners to hit events.
-     *
-     * @param hl GameLogic.HitListener.
-     */
-    public void removeHitListener(HitListener hl) {
-        this.hitListeners.remove(hl);
+    public void removeVisitable(Visitable visitable) {
+        this.visitableCollection.getVisitables().remove(visitable);
     }
 
     /**
@@ -232,12 +160,10 @@ public class GameLevel implements HitNotifier, Animation {
         this.countDownColour = levelInformation.countDownColour();
         //Set background.
         addBackground((Background) levelInformation.getBackground());
-        //Set animation runner.
-        this.runner = animationRunner;
         //Set number of balls.
         this.numOfBalls = levelInformation.numberOfBalls();
         //Create GUI.
-        this.gui = this.runner.getGui();
+        this.gui = this.animationRunner.getGui();
         //Create colour selection.
         this.blocksRemaining = new Counter(levelInformation.numberOfBlocksToRemove());
         //Set score.
@@ -295,7 +221,7 @@ public class GameLevel implements HitNotifier, Animation {
      * @param dt change in time.
      */
     public void doOneFrame(DrawSurface d, double dt) {
-        this.sprites.drawAllOn(d);
+        this.visitableCollection.visitAll(d);
         if (this.blocksRemaining.getValue() == 0) {
             removePaddleAndBalls();
             this.running = false;
@@ -309,11 +235,10 @@ public class GameLevel implements HitNotifier, Animation {
             this.running = false;
         }
         if (this.gui.getKeyboardSensor().isPressed("p")) {
-            this.runner.run(new PauseScreen(this.gui.getKeyboardSensor()));
+            this.animationRunner.run(new PauseScreen(this.gui.getKeyboardSensor()));
         }
-        sprites.notifyAllTimePassed(dt);
+        visitableCollection.notifyAllTimePassed(dt);
     }
-
 
     /**
      * Run the game -- start the animation loop.
@@ -321,23 +246,23 @@ public class GameLevel implements HitNotifier, Animation {
     public void playOneTurn() {
         newBallsAndPaddle();
         if (this.lives.getValue() != 0) {
-            this.runner.run(new CountdownAnimation(2, 4, sprites, this.countDownColour));
+            this.animationRunner.run(new CountdownAnimation(2, 4, this.countDownColour, visitableCollection));
             this.running = true;
         }
         if (this.lives.getValue() == 0) {
             this.running = false;
         }
-        this.runner.run(this);
+        this.animationRunner.run(this);
     }
 
     /**
      * Method removes the paddle and balls from the game.
      */
     public void removePaddleAndBalls() {
-        removeSprite(this.paddle);
+        removeVisitable(this.paddle);
         removeCollidable(this.paddle);
-        for (int i = 0; i < this.balls.length; i++) {
-            removeSprite(this.balls[i]);
+        for (int i = 0; i < this.balls.size(); i++) {
+            removeVisitable(this.balls.get(i));
         }
     }
 
@@ -348,10 +273,10 @@ public class GameLevel implements HitNotifier, Animation {
         //Create balls.
         createBall();
         for (int k = 0; k < numOfBalls; k++) {
-            this.balls[k].addToGame(this);
+            this.balls.get(k).addToGame(this);
         }
         setBallsRemaining(new Counter(numOfBalls));
-        //Create gameobjects.Paddle
+        //Create Paddle
         this.paddle = createPaddle();
         this.paddle.addToGame(this);
     }
@@ -362,8 +287,7 @@ public class GameLevel implements HitNotifier, Animation {
      * @param colourBackground ColourBackground.
      */
     public void addBackground(Background colourBackground) {
-        this.addSprite(colourBackground);
-        this.addSprite((Sprite) levelInformation);
+        this.addVisitable(colourBackground);
     }
 
     /**
@@ -396,18 +320,22 @@ public class GameLevel implements HitNotifier, Animation {
      */
     public void createBall() {
         //Create new gameobjects.Ball.
-        this.balls = new Ball[numOfBalls];
-        for (int i = 0; i < this.numOfBalls; i++) {
-            int x = (int) levelInformation.balls().get(i).getX();
-            int y = (int) levelInformation.balls().get(i).getY();
-            int r = levelInformation.balls().get(i).getR();
-            Color color = levelInformation.balls().get(i).getColor();
-            this.balls[i] = new Ball(x, y, r, color);
-            Velocity v = levelInformation.initialBallVelocities().get(i);
-            //Set ball's velocity.
-            this.balls[i].setVelocity(v);
-            this.balls[i].setGameEnvironment(environment);
+        this.balls = levelInformation.balls();
+//        this.balls = new Ball[numOfBalls];
+//        for (int i = 0; i < this.numOfBalls; i++) {
+//            int x = (int) levelInformation.balls().get(i).getX();
+//            int y = (int) levelInformation.balls().get(i).getY();
+//            int r = levelInformation.balls().get(i).getR();
+//            Color color = levelInformation.balls().get(i).getColor();
+//            this.balls[i] = new Ball(x, y, r, color);
+//            Velocity v = levelInformation.initialBallVelocities().get(i);
+//            //Set ball's velocity.
+//            this.balls[i].setVelocity(v);
+//        this.balls[i].setGameEnvironment(environment);
+        for (Ball ball : balls) {
+            ball.setGameEnvironment(environment);
         }
+//        }
     }
 
     /**

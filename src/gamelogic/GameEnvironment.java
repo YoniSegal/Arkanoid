@@ -2,6 +2,7 @@ package gamelogic;
 
 import gameobjects.Collidable;
 import geometry.Line;
+import geometry.LineRectangleCompare;
 import geometry.Point;
 
 import java.util.ArrayList;
@@ -51,11 +52,13 @@ public class GameEnvironment {
      * @return GameLogic.CollisionInfo - collidables.
      */
     public CollisionInfo getClosestCollision(Line trajectory) {
+        LineRectangleCompare lineRectangleCompare = new LineRectangleCompare();
         for (int i = 0; i < this.collidables.size(); i++) {
             Collidable collidable = collidables.get(i);
             Point collisionPoint;
             //Get closest intersection point.
-            collisionPoint = trajectory.closestIntersectionToStartOfLine(collidable.getCollisionRectangle());
+//            collisionPoint = trajectory.closestIntersectionToStartOfLine(collidable.getCollisionRectangle());
+            collisionPoint = lineRectangleCompare.closestIntersectionToStartOfLine(trajectory, collidable.getCollisionRectangle());
             if (collisionPoint == null) {
                 continue;
             } else {

@@ -2,8 +2,8 @@ package tasks;
 
 import gamelogic.AnimationRunner;
 import gamelogic.GameFlow;
-import gamelogic.LevelInformation;
-import gamelogic.LevelSpecificationReader;
+import levels.LevelInformation;
+import levels.LevelSpecificationReader;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -17,22 +17,24 @@ public class CountdownAnimation implements Animation {
     private int countFrom;
     private int temp;
     private Color color;
-    private SpriteCollection gameScreen;
+    //    private SpriteCollection spriteCollection;
+    private VisitableCollection visitableCollection;
     private boolean shouldStop = false;
 
     /**
      * Constructor assigns the number of seconds to count, where to count from,
      * a SpriteCollection and a colour.
      *
-     * @param numOfSeconds double.
-     * @param countFrom    int.
-     * @param gameScreen   SpriteCollection.
-     * @param color        Colour.
+     * @param numOfSeconds        double.
+     * @param countFrom           int.
+     * @param color               Colour.
+     * @param visitableCollection
      */
-    public CountdownAnimation(double numOfSeconds, int countFrom, SpriteCollection gameScreen, Color color) {
+    public CountdownAnimation(double numOfSeconds, int countFrom, Color color, VisitableCollection visitableCollection) {
         this.numOfSeconds = numOfSeconds;
         this.countFrom = countFrom;
-        this.gameScreen = gameScreen;
+//        this.spriteCollection = spriteCollection;
+        this.visitableCollection = visitableCollection;
         this.temp = countFrom;
         this.color = color;
     }
@@ -48,7 +50,8 @@ public class CountdownAnimation implements Animation {
         long sleepLength = (long) (1000 * numOfSeconds / temp);
         if (!shouldStop) {
             if (countFrom > 0) {
-                gameScreen.drawAllOn(d);
+                //gameScreen.drawAllOn(d);
+                visitableCollection.visitAll(d);
                 d.setColor(Color.BLACK);
                 d.drawText((d.getWidth() / 2) - 1, (d.getHeight() / 2) - 1, Integer.toString(countFrom - 1), 36);
 

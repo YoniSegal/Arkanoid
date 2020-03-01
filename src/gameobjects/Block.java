@@ -1,13 +1,9 @@
 package gameobjects;
 
-import gamelogic.Counter;
-import gamelogic.GameLevel;
-import gamelogic.HitListener;
-import gamelogic.HitNotifier;
-import gamelogic.Velocity;
+import gamelogic.*;
 import geometry.Point;
 import geometry.Rectangle;
-import biuoop.DrawSurface;
+import levels.GameLevel;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -22,13 +18,13 @@ import java.util.Map;
  * @author Yonatan Segal
  * @version 1
  */
-public class Block implements Collidable, Sprite, HitNotifier {
-    private geometry.Rectangle rectangle;
+public class Block implements Visitable, Collidable, HitNotifier {
+    private Rectangle rectangle;
     private Color colour;
-    private List<HitListener> hitListeners = new ArrayList();
+    private List<HitListener> hitListeners = new ArrayList<>();
     private Counter hitsRemaining;
-    private Map<String, ColourBackground> colourBackgroundMap = new HashMap<>();
-    private Map<String, ImageBackground> imageBackgroundMap = new HashMap<>();
+//    private Map<String, ColourBackground> colourBackgroundMap = new HashMap<>();
+//    private Map<String, ImageBackground> imageBackgroundMap = new HashMap<>();
     private Map<Integer, Background> fill;
     private Color stroke;
     private String symbol;
@@ -127,6 +123,10 @@ public class Block implements Collidable, Sprite, HitNotifier {
         }
     }
 
+    public Color getStroke() {
+        return stroke;
+    }
+
     /**
      * Method returns the number of hits a block can incur.
      *
@@ -167,8 +167,9 @@ public class Block implements Collidable, Sprite, HitNotifier {
      * @param gameLevel GameLogic.GameLevel - gameLevel being played.
      */
     public void addToGame(GameLevel gameLevel) {
-        gameLevel.addSprite(this);
+//        gameLevel.addSprite(this);
         gameLevel.addCollidable(this);
+        gameLevel.addVisitable(this);
     }
 
     /**
@@ -177,43 +178,11 @@ public class Block implements Collidable, Sprite, HitNotifier {
      * @param gameLevel Gamelevel.
      */
     public void removeFromGame(GameLevel gameLevel) {
-        gameLevel.removeSprite(this);
+        //gameLevel.removeSprite(this);
+        gameLevel.removeVisitable(this);
         gameLevel.removeCollidable(this);
+
     }
-
-    /**
-     * Method draws block on the given DrawSurface, draws number of hits incurred.
-     *
-     * @param surface (DrawSurface given)
-     */
-    public void drawOn(DrawSurface surface) {
-        //Fill circle.
-        int upperleftX = (int) this.getCollisionRectangle().getUpperLeft().getX();
-        int upperleftY = (int) this.getCollisionRectangle().getUpperLeft().getY();
-        int width = (int) this.getCollisionRectangle().getWidth();
-        int height = (int) this.getCollisionRectangle().getHeight();
-        //Check if colour has been initialised.
-        if (this.colour != null) {
-            surface.setColor(this.colour);
-        }
-        int hits = this.hitsRemaining.getValue();
-
-
-        if (this.fill != null && this.fill.get(hits) != null) {
-            if (this.fill.get(hits).getColour() != null) {
-                surface.setColor((this.fill.get(hits).getColour()));
-                surface.fillRectangle(upperleftX, upperleftY, width, height);
-            } else {
-                surface.drawImage(upperleftX, upperleftY, this.fill.get(hits).getImage());
-            }
-        }
-
-        if (this.stroke != null) {
-            surface.setColor(this.stroke);
-            surface.drawRectangle(upperleftX, upperleftY, width, height);
-        }
-    }
-
 
     /**
      * Method updates block that time has passed.
@@ -242,23 +211,23 @@ public class Block implements Collidable, Sprite, HitNotifier {
         this.hitListeners.remove(hl);
     }
 
-    /**
-     * Method sets Map.
-     *
-     * @param c map.
-     */
-    public void setColourBackgroundMap(Map<String, ColourBackground> c) {
-        this.colourBackgroundMap = c;
-    }
-
-    /**
-     * Method sets map.
-     *
-     * @param i map.
-     */
-    public void setImageBackgroundMap(Map<String, ImageBackground> i) {
-        this.imageBackgroundMap = i;
-    }
+//    /**
+//     * Method sets Map.
+//     *
+//     * @param c map.
+//     */
+//    public void setColourBackgroundMap(Map<String, ColourBackground> c) {
+//        this.colourBackgroundMap = c;
+//    }
+//
+//    /**
+//     * Method sets map.
+//     *
+//     * @param i map.
+//     */
+//    public void setImageBackgroundMap(Map<String, ImageBackground> i) {
+//        this.imageBackgroundMap = i;
+//    }
 
     /**
      * Method sets fill.
@@ -294,5 +263,10 @@ public class Block implements Collidable, Sprite, HitNotifier {
      */
     public void setSymbol(String s) {
         this.symbol = s;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

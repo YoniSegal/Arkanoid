@@ -4,6 +4,7 @@ import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
 import gamelogic.Animation;
 import gamelogic.KeyPressStoppableAnimation;
+import gamelogic.SpriteVisitor;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
      */
     public void doOneFrame(DrawSurface d, double dt) {
         ColourBackground colourBackground = new ColourBackground(Color.GRAY);
-        colourBackground.drawOn(d);
+        colourBackground.accept(new SpriteVisitor(d));
         d.setColor(Color.YELLOW.brighter());
         d.drawText(100, 80, "Arkanoid", 40);
         d.setColor(Color.GREEN);

@@ -1,5 +1,6 @@
-package gamelogic;
+package levels;
 
+import gamelogic.ColorsParser;
 import gameobjects.Background;
 import gameobjects.ColourBackground;
 import gameobjects.ImageBackground;

@@ -1,6 +1,8 @@
 package gameobjects;
 
 import biuoop.DrawSurface;
+import gamelogic.Visitable;
+import gamelogic.Visitor;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -11,7 +13,7 @@ import java.awt.image.BufferedImage;
  * @author Yonatan Segal
  * @version 1
  */
-public class ColourBackground implements Sprite, Background {
+public class ColourBackground implements Visitable, Background {
     private Color color;
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 600;
@@ -26,14 +28,16 @@ public class ColourBackground implements Sprite, Background {
         this.color = color;
     }
 
-    /**
-     * Method draws the sprite to the screen.
-     *
-     * @param d drawSrurface.
-     */
-    public void drawOn(DrawSurface d) {
-        d.setColor(this.color);
-        d.fillRectangle(BORDER_GAP, 3 * BORDER_GAP, MAX_WIDTH, MAX_HEIGHT);
+    public static int getMaxWidth() {
+        return MAX_WIDTH;
+    }
+
+    public static int getMaxHeight() {
+        return MAX_HEIGHT;
+    }
+
+    public static int getBorderGap() {
+        return BORDER_GAP;
     }
 
     /**
@@ -61,5 +65,10 @@ public class ColourBackground implements Sprite, Background {
      */
     public BufferedImage getImage() {
         return null;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

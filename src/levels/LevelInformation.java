@@ -1,8 +1,9 @@
-package gamelogic;
+package levels;
 
+import gamelogic.Velocity;
+import gamelogic.Visitable;
 import gameobjects.Ball;
 import gameobjects.Block;
-import gameobjects.Sprite;
 
 import java.awt.Color;
 import java.util.List;
@@ -21,14 +22,14 @@ public interface LevelInformation {
      * @return int number of balls in the level.
      */
     int numberOfBalls();
-
-    /**
-     * Method returns the initial velocity of each ball. Note that
-     * initialBallVelocities().size() == numberOfBalls().
-     *
-     * @return list of velocities.
-     */
-    List<Velocity> initialBallVelocities();
+//
+//    /**
+//     * Method returns the initial velocity of each ball. Note that
+//     * initialBallVelocities().size() == numberOfBalls().
+//     *
+//     * @return list of velocities.
+//     */
+//    List<Velocity> initialBallVelocities();
 
     /**
      * Method returns the speed of the paddle.
@@ -56,7 +57,7 @@ public interface LevelInformation {
      *
      * @return Sprite - background.
      */
-    Sprite getBackground();
+    Visitable getBackground();
 
     /**
      * The Blocks that make up this level, each block contains its size, color
@@ -73,13 +74,6 @@ public interface LevelInformation {
      * @return int - number of blocks to remove.
      */
     int numberOfBlocksToRemove();
-
-    /**
-     * Method returns the number of lives in a given level.
-     *
-     * @return int - number of lives.
-     */
-    int numOfLives();
 
     /**
      * Method returns a list of balls.

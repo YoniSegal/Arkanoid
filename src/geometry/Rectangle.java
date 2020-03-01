@@ -62,33 +62,6 @@ public class Rectangle {
     }
 
     /**
-     * Method returns a (possibly empty) List of intersection points with the specified line.
-     *
-     * @param line geometry.Line.
-     * @return List of points.
-     */
-    public List intersectionPoints(Line line) {
-        List<Point> points = new ArrayList<>();
-        //Check if array hits top of rectangle.
-        if (line.isIntersecting(this.top)) {
-            points.add(line.intersectionWith(this.top));
-        }
-        //Check if array hits bottom of rectangle.
-        if (line.isIntersecting(this.bottom)) {
-            points.add(line.intersectionWith(this.bottom));
-        }
-        //Check if array hits right of rectangle.
-        if (line.isIntersecting(this.right)) {
-            points.add(line.intersectionWith(this.right));
-        }
-        //Check if array hits left of rectangle.
-        if (line.isIntersecting(this.left)) {
-            points.add(line.intersectionWith(this.left));
-        }
-        return points;
-    }
-
-    /**
      * Method returns the width and height of the rectangle.
      *
      * @return width of rectangle.
@@ -131,42 +104,6 @@ public class Rectangle {
      */
     public Point getUpperLeft() {
         return this.upperLeft;
-    }
-
-    /**
-     * Method sets the upper-left point of the rectangle.
-     *
-     * @param topLeft top left corner.
-     */
-    public void setUpperLeft(Point topLeft) {
-        this.upperLeft = topLeft;
-    }
-
-    /**
-     * Method returns the lower-left point of the rectangle.
-     *
-     * @return lowerl eft point.
-     */
-    public Point getLowerLeft() {
-        return this.lowerLeft;
-    }
-
-    /**
-     * Method returns the lower-right point of the rectangle.
-     *
-     * @return lower right point.
-     */
-    public Point getLowerRight() {
-        return this.lowerRight;
-    }
-
-    /**
-     * Method returns the upper-right point of the rectangle.
-     *
-     * @return upper right point.
-     */
-    public Point getUpperRight() {
-        return this.upperRight;
     }
 
     /**

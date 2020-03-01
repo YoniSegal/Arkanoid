@@ -1,11 +1,8 @@
 package gameobjects;
 
-import gamelogic.Counter;
-import gamelogic.GameLevel;
-import gamelogic.LevelInformation;
-import biuoop.DrawSurface;
-
-import java.awt.Color;
+import gamelogic.*;
+import levels.GameLevel;
+import levels.LevelInformation;
 
 /**
  * Class keeps track of and displays the current level.
@@ -13,7 +10,7 @@ import java.awt.Color;
  * @author Yonatan Segal
  * @version 1
  */
-public class LevelIndicator implements Sprite {
+public class LevelIndicator implements Visitable {
     private Counter lives;
     private Block upperBlock;
     private LevelInformation levelInformation;
@@ -32,18 +29,13 @@ public class LevelIndicator implements Sprite {
         this.levelInformation = levelInformation;
     }
 
-    /**
-     * Method draws the sprite to the screen.
-     *
-     * @param d drawSrurface.
-     */
-    public void drawOn(DrawSurface d) {
-        //Draw level.
-        String hit = "Level: " + levelInformation.levelName();
-        int x = (int) this.upperBlock.getCollisionRectangle().getRight().middle().getX() - 180;
-        int y = (int) this.upperBlock.getCollisionRectangle().getRight().middle().getY() + 10;
-        d.setColor(Color.BLACK);
-        d.drawText(x, y, hit, 20);
+
+    public LevelInformation getLevelInformation() {
+        return levelInformation;
+    }
+
+    public Block getUpperBlock() {
+        return upperBlock;
     }
 
     /**
@@ -52,7 +44,8 @@ public class LevelIndicator implements Sprite {
      * @param gameLevel GameLogic.GameLevel - gameLevel being played.
      */
     public void addToGame(GameLevel gameLevel) {
-        gameLevel.addSprite(this);
+//        gameLevel.addSprite(this);
+        gameLevel.addVisitable(this);
     }
 
     /**
@@ -62,5 +55,10 @@ public class LevelIndicator implements Sprite {
      */
     public void timePassed(double dt) {
 
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

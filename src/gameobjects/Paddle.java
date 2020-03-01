@@ -1,14 +1,14 @@
 package gameobjects;
 
-import gamelogic.GameLevel;
+import levels.GameLevel;
 import gamelogic.Velocity;
+import gamelogic.Visitable;
+import gamelogic.Visitor;
 import geometry.Line;
+import geometry.LineCompare;
 import geometry.Point;
 import geometry.Rectangle;
-import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
-
-import java.awt.Color;
 
 /**
  * Class implements gameobjects.Sprite and gameobjects.Collidable interfaces.
@@ -16,9 +16,9 @@ import java.awt.Color;
  * @author Yonatan Segal
  * @version 1
  */
-public class Paddle implements Sprite, Collidable {
+public class Paddle implements Visitable, Collidable {
     private Rectangle rectangle;
-    private biuoop.KeyboardSensor keyboard;
+    private KeyboardSensor keyboard;
     private double distance;
     private static final int MAX_WIDTH = 800;
 
@@ -91,21 +91,6 @@ public class Paddle implements Sprite, Collidable {
     }
 
     /**
-     * Method draws paddle.
-     *
-     * @param d Drawsurface.
-     */
-    public void drawOn(DrawSurface d) {
-        int upperleftX = (int) this.rectangle.getUpperLeft().getX();
-        int upperleftY = (int) this.rectangle.getUpperLeft().getY();
-        int width = (int) this.rectangle.getWidth();
-        int height = (int) this.rectangle.getHeight();
-        //Fill rectangle.
-        d.setColor(Color.YELLOW);
-        d.fillRectangle(upperleftX, upperleftY, width, height);
-    }
-
-    /**
      * Method returns collision rectangle.
      *
      * @return geometry.Rectangle.
@@ -145,9 +130,10 @@ public class Paddle implements Sprite, Collidable {
         //Define length of segment.
         double oneSection = len / 5.0;
         //Calculate distance between collision point and edge of line.
-        double hitPoint = Math.abs(collisionPoint.getX() - line.start().getX());
+        double hitPoint = Math.abs(collisionPoint.getX() - line.getStart().getX());
         //Divide to get section value.
         int fracHit = (int) (hitPoint / oneSection);
+        LineCompare lineCompare = new LineCompare();
         //If edges are hit, rebound them.
         if (left.pointOnLine(collisionPoint) || right.pointOnLine(collisionPoint)) {
             return new Velocity(currentVelocity.getDx() * -1, currentVelocity.getDy());
@@ -163,6 +149,11 @@ public class Paddle implements Sprite, Collidable {
      */
     public void addToGame(GameLevel g) {
         g.addCollidable(this);
-        g.addSprite(this);
+        g.addVisitable(this);
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

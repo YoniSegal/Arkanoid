@@ -1,8 +1,10 @@
-package gameobjects;
+package levels;
 
-import biuoop.DrawSurface;
-import gamelogic.LevelInformation;
 import gamelogic.Velocity;
+import gamelogic.Visitable;
+import gameobjects.Background;
+import gameobjects.Ball;
+import gameobjects.Block;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -14,27 +16,39 @@ import java.util.List;
  * @author Yonatan Segal
  * @version 1
  */
-public class Level implements LevelInformation, Sprite {
-    private int numOfBalls;
-    private List<Velocity> ballVelocities;
+public class Level implements LevelInformation {
+    protected int numOfBalls;
     private int paddleSpeed;
     private int paddleWidth;
     private String levelname;
-    private Background background;
-    private List<Block> blocks;
-    private int blockstoRemove;
-    private List<Ball> balls;
+    private Visitable background;
+    protected List<Block> blocks;
+    private int blocksToRemove;
+    protected List<Ball> balls;
     private Color color;
     private int rowHeight;
     private int startX;
     private int startY;
     private int levelNumber;
 
+    public Level() {
+    }
+
     /**
      * Blank constructor.
      */
-    public Level() {
-
+    public Level(int paddleSpeed, int paddleWidth, String levelName, Visitable background, int startX, int startY, int rowHeight) {
+        this.paddleSpeed = paddleSpeed;
+        this.paddleWidth = paddleWidth;
+        this.levelname = levelName;
+        this.background = background;
+        this.startX = startX;
+        this.startY = startY;
+        this.rowHeight = rowHeight;
+        this.balls = balls();
+        this.numOfBalls = balls.size();
+        this.blocks = blocks();
+        this.blocksToRemove = blocks.size();
     }
 
     /**
@@ -43,17 +57,7 @@ public class Level implements LevelInformation, Sprite {
      * @return int number of balls in the level.
      */
     public int numberOfBalls() {
-        return this.numOfBalls;
-    }
-
-    /**
-     * Method returns the initial velocity of each ball. Note that
-     * initialBallVelocities().size() == numberOfBalls().
-     *
-     * @return list of velocities.
-     */
-    public List<Velocity> initialBallVelocities() {
-        return this.ballVelocities;
+        return balls.size();
     }
 
     /**
@@ -88,8 +92,8 @@ public class Level implements LevelInformation, Sprite {
      *
      * @return Sprite - background.
      */
-    public Sprite getBackground() {
-        return (Sprite) this.background;
+    public Visitable getBackground() {
+        return this.background;
     }
 
     /**
@@ -109,16 +113,7 @@ public class Level implements LevelInformation, Sprite {
      * @return int - number of blocks to remove.
      */
     public int numberOfBlocksToRemove() {
-        return this.blockstoRemove;
-    }
-
-    /**
-     * Method returns the number of lives in a given level.
-     *
-     * @return int - number of lives.
-     */
-    public int numOfLives() {
-        return 0;
+        return this.blocks.size();
     }
 
     /**
@@ -146,15 +141,6 @@ public class Level implements LevelInformation, Sprite {
      */
     public int rowHeight() {
         return this.rowHeight;
-    }
-
-    /**
-     * Method returns point of starting block.
-     *
-     * @return Point.
-     */
-    public Point startingBlock() {
-        return new Point(startX, startY);
     }
 
     /**
@@ -196,19 +182,10 @@ public class Level implements LevelInformation, Sprite {
     /**
      * Method sets background.
      *
-     * @param b background.
+     * @param visitable background.
      */
-    public void setBackground(Background b) {
-        this.background = b;
-    }
-
-    /**
-     * Methd sets ball Velocities.
-     *
-     * @param b b
-     */
-    public void setBallVelocities(List<Velocity> b) {
-        this.ballVelocities = b;
+    public void setBackground(Visitable visitable) {
+        this.background = visitable;
     }
 
     /**
@@ -225,8 +202,8 @@ public class Level implements LevelInformation, Sprite {
      *
      * @param b int.
      */
-    public void setBlockstoRemove(int b) {
-        this.blockstoRemove = b;
+    public void setBlocksToRemove(int b) {
+        this.blocksToRemove = b;
     }
 
     /**
@@ -302,15 +279,6 @@ public class Level implements LevelInformation, Sprite {
     }
 
     /**
-     * Method returns a list of velocities.
-     *
-     * @return List.
-     */
-    public List<Velocity> getBallVelocities() {
-        return ballVelocities;
-    }
-
-    /**
      * MEthod returns a list of balls.
      *
      * @return List.
@@ -319,21 +287,4 @@ public class Level implements LevelInformation, Sprite {
         return balls;
     }
 
-    /**
-     * Method draws the sprite to the screen.
-     *
-     * @param d drawSrurface.
-     */
-    public void drawOn(DrawSurface d) {
-
-    }
-
-    /**
-     * Method notifies the sprite that time has passed.
-     *
-     * @param dt change in time.
-     */
-    public void timePassed(double dt) {
-
-    }
 }

@@ -50,7 +50,6 @@ public class AnimationRunner {
         while (!animation.shouldStop()) {
             long startTime = System.currentTimeMillis(); // timing
             DrawSurface d = gui.getDrawSurface();
-
             animation.doOneFrame(d, this.dt);
 
             gui.show(d);

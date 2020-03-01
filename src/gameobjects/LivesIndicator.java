@@ -1,10 +1,9 @@
 package gameobjects;
 
 import gamelogic.Counter;
-import gamelogic.GameLevel;
-import biuoop.DrawSurface;
-
-import java.awt.Color;
+import levels.GameLevel;
+import gamelogic.Visitable;
+import gamelogic.Visitor;
 
 /**
  * Class keeps track of and displays the current number of lives remaining.
@@ -12,7 +11,7 @@ import java.awt.Color;
  * @author Yonatan Segal
  * @version 1
  */
-public class LivesIndicator implements Sprite {
+public class LivesIndicator implements Visitable {
     private Counter lives;
     private Block upperBlock;
 
@@ -27,19 +26,14 @@ public class LivesIndicator implements Sprite {
         this.upperBlock = upperBlock;
     }
 
-    /**
-     * Method draws the sprite to the screen.
-     *
-     * @param d drawSrurface.
-     */
-    public void drawOn(DrawSurface d) {
-        //Draw score.
-        String hit = "Lives: " + Integer.toString(this.lives.getValue());
-        int x = (int) this.upperBlock.getCollisionRectangle().getLeft().middle().getX();
-        int y = (int) this.upperBlock.getCollisionRectangle().getLeft().middle().getY() + 10;
-        d.setColor(Color.BLACK);
-        d.drawText(x, y, hit, 20);
+    public Counter getLives() {
+        return lives;
     }
+
+    public Block getUpperBlock() {
+        return upperBlock;
+    }
+
 
     /**
      * Method adds block as a gameobjects.Sprite and a gameobjects.Collidable to the gameLevel.
@@ -47,7 +41,7 @@ public class LivesIndicator implements Sprite {
      * @param gameLevel GameLogic.GameLevel - gameLevel being played.
      */
     public void addToGame(GameLevel gameLevel) {
-        gameLevel.addSprite(this);
+        gameLevel.addVisitable(this);
     }
 
 
@@ -58,5 +52,10 @@ public class LivesIndicator implements Sprite {
      */
     public void timePassed(double dt) {
 
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

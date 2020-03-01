@@ -5,6 +5,7 @@ import biuoop.KeyboardSensor;
 import gamelogic.Animation;
 import gamelogic.AnimationRunner;
 import gamelogic.KeyPressStoppableAnimation;
+import gamelogic.SpriteVisitor;
 
 import java.awt.Color;
 
@@ -48,7 +49,7 @@ public class HighScoresAnimation implements Animation {
      */
     public void doOneFrame(DrawSurface d, double dt) {
         ColourBackground colourBackground = new ColourBackground(Color.GRAY);
-        colourBackground.drawOn(d);
+        colourBackground.accept(new SpriteVisitor(d));
         d.setColor(Color.YELLOW);
         d.drawText(100, 80, "High Scores", 40);
         d.setColor(Color.GREEN);

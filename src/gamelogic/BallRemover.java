@@ -2,6 +2,7 @@ package gamelogic;
 
 import gameobjects.Ball;
 import gameobjects.Block;
+import levels.GameLevel;
 
 /**
  * Class implements a hitListener to determine if a ball is to be removed from a game.

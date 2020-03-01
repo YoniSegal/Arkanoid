@@ -6,6 +6,8 @@ import gameobjects.FinalScreenAnimation;
 import biuoop.KeyboardSensor;
 import gameobjects.HighScoresAnimation;
 import gameobjects.HighScoresTable;
+import levels.GameLevel;
+import levels.LevelInformation;
 
 import java.io.File;
 import java.io.IOException;

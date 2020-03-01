@@ -1,6 +1,8 @@
 package gameobjects;
 
 import biuoop.DrawSurface;
+import gamelogic.Visitable;
+import gamelogic.Visitor;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -14,7 +16,7 @@ import java.io.InputStream;
  * @author Yonatan Segal
  * @version 1
  */
-public class ImageBackground implements Sprite, Background {
+public class ImageBackground implements Visitable, Background {
     private BufferedImage image;
 
     /**
@@ -31,15 +33,6 @@ public class ImageBackground implements Sprite, Background {
         }
     }
 
-    /**
-     * Method draws the sprite to the screen.
-     *
-     * @param d drawSrurface.
-     */
-    public void drawOn(DrawSurface d) {
-        // Draw the image on a DrawSurface
-        d.drawImage(10, 20, this.image); // draw the image at location 10, 20.
-    }
 
     /**
      * Method notifies the sprite that time has passed.
@@ -66,5 +59,10 @@ public class ImageBackground implements Sprite, Background {
      */
     public BufferedImage getImage() {
         return image;
+    }
+
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -1,11 +1,12 @@
-package gamelogic;
+package levels;
 
+import gamelogic.ColorsParser;
+import gamelogic.Velocity;
 import gameobjects.Background;
 import gameobjects.Ball;
 import gameobjects.Block;
 import gameobjects.ColourBackground;
 import gameobjects.ImageBackground;
-import gameobjects.Level;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -108,11 +109,11 @@ public class LevelSpecificationReader {
         if (s.contains("color")) {
             ColorsParser colorsParser = new ColorsParser();
             Color color = colorsParser.colorFromString(s);
-            return (Background) new ColourBackground(color);
+            return new ColourBackground(color);
         } else if (s.contains("image")) {
             String[] parts = s.split("\\(|\\)");
             File file = new File(parts[1]);
-            return (Background) new ImageBackground(parts[1]);
+            return new ImageBackground(parts[1]);
         }
         return null;
     }
@@ -131,8 +132,9 @@ public class LevelSpecificationReader {
             level.setLevelname(readLevelName(line));
         }
         if (line.contains("ball_velocities")) {
-            level.setBallVelocities(readVelocities(line));
-            level.setBalls(readBalls(level.getBallVelocities()));
+            List<Velocity> ballVelocities = readVelocities(line);
+            //level.setBallVelocities(readVelocities(line));
+            level.setBalls(readBalls(ballVelocities));
             level.setNumOfBalls(level.getBalls().size());
         }
         if (line.contains("background")) {
@@ -167,7 +169,7 @@ public class LevelSpecificationReader {
             level.setRowHeight(readInt(line));
         }
         if (line.contains("num_blocks")) {
-            level.setBlockstoRemove(readInt(line));
+            level.setBlocksToRemove(readInt(line));
         }
     }
 

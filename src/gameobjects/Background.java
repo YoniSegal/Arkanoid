@@ -1,5 +1,7 @@
 package gameobjects;
 
+import gamelogic.Visitable;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
@@ -9,7 +11,7 @@ import java.awt.image.BufferedImage;
  * @author Yonatan Segal
  * @version 1
  */
-public interface Background extends Sprite {
+public interface Background extends Visitable {
 
     /**
      * Method returns the colour used in the background and null if none was used.

@@ -1,18 +1,11 @@
 package gameobjects;
 
-import gamelogic.CollisionInfo;
-import gamelogic.GameEnvironment;
-import gamelogic.GameLevel;
-import gamelogic.HitListener;
-import gamelogic.HitNotifier;
-import gamelogic.Velocity;
+import gamelogic.*;
 import geometry.Line;
 import geometry.Point;
-import biuoop.DrawSurface;
+import levels.GameLevel;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Creates a ball with a centre point, radius, velocity, colour, and movement
@@ -21,14 +14,13 @@ import java.util.List;
  * @author Yonatan Segal
  * @version 1
  */
-public class Ball implements Sprite, HitNotifier {
+public class Ball implements Visitable {
     //Declare object parameters.
     private Point centre;
     private int r;
     private Velocity velocity;
     private Color colour;
     private GameEnvironment gameEnvironment;
-    private List<HitListener> hitListeners = new ArrayList();
 
     /**
      * Constructor assigns centre point, radius, velocity and colour.
@@ -68,7 +60,7 @@ public class Ball implements Sprite, HitNotifier {
      * @param g Game level.
      */
     public void removeFromGame(GameLevel g) {
-        g.removeSprite(this);
+        g.removeVisitable(this);
     }
 
     /**
@@ -77,7 +69,7 @@ public class Ball implements Sprite, HitNotifier {
      * @param gameLevel GameLogic.GameLevel being played.
      */
     public void addToGame(GameLevel gameLevel) {
-        gameLevel.addSprite(this);
+        gameLevel.addVisitable(this);
     }
 
     /**
@@ -104,23 +96,7 @@ public class Ball implements Sprite, HitNotifier {
      * @param v ball's velocity.
      */
     public void setVelocity(Velocity v) {
-        //Set ball's velocity.
         this.velocity = v;
-    }
-
-    /**
-     * Method sets ball's velocity through change in vertical and horizontal
-     * displacement.
-     *
-     * @param dx change in horizontal displacement.
-     * @param dy change in vertical displacement.
-     */
-    public void setVelocity(double dx, double dy) {
-        /*
-        Set ball's velocity through change in vertical and horizontal
-        displacement.
-        */
-        this.velocity = new Velocity(dx, dy);
     }
 
     /**
@@ -129,7 +105,6 @@ public class Ball implements Sprite, HitNotifier {
      * @return velocity (gameobjects.Ball's velocity).
      */
     public Velocity getVelocity() {
-        //Return ball's velocity.
         return this.velocity;
     }
 
@@ -189,7 +164,6 @@ public class Ball implements Sprite, HitNotifier {
      * @return int (x-coordinate of centre point).
      */
     public double getX() {
-        //Return x coordinate of centre point.
         return this.centre.getX();
     }
 
@@ -199,7 +173,6 @@ public class Ball implements Sprite, HitNotifier {
      * @return int (y-coordinate of centre point).
      */
     public double getY() {
-        //Return y coordinate of centre point.
         return this.centre.getY();
     }
 
@@ -209,7 +182,6 @@ public class Ball implements Sprite, HitNotifier {
      * @return int (radius of ball).
      */
     public int getSize() {
-        //Return ball's radius.
         return this.r;
     }
 
@@ -219,21 +191,7 @@ public class Ball implements Sprite, HitNotifier {
      * @return colour (ball's colour).
      */
     public Color getColor() {
-        //Return ball's colour.
         return this.colour;
-    }
-
-    /**
-     * Method draws ball on the given DrawSurface.
-     *
-     * @param surface (DrawSurface given)
-     */
-    public void drawOn(DrawSurface surface) {
-        //Fill circle.
-        surface.setColor(Color.BLACK);
-        surface.drawCircle((int) getX(), (int) getY(), r);
-        surface.setColor(this.colour);
-        surface.fillCircle((int) getX(), (int) getY(), r);
     }
 
     /**
@@ -245,21 +203,8 @@ public class Ball implements Sprite, HitNotifier {
         moveOneStep(dt);
     }
 
-    /**
-     * method adds a hitlistener.
-     *
-     * @param hl GameLogic.HitListener.
-     */
-    public void addHitListener(HitListener hl) {
-        this.hitListeners.add(hl);
-    }
-
-    /**
-     * Method removes a hitlistener from a game level.
-     *
-     * @param hl GameLogic.HitListener.
-     */
-    public void removeHitListener(HitListener hl) {
-        this.hitListeners.remove(hl);
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
     }
 }

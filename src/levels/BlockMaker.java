@@ -1,4 +1,4 @@
-package gamelogic;
+package levels;
 
 import gameobjects.Background;
 import gameobjects.Block;

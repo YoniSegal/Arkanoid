@@ -2,6 +2,7 @@ package gamelogic;
 
 import gameobjects.Ball;
 import gameobjects.Block;
+import levels.GameLevel;
 
 import java.util.ArrayList;
 import java.util.List;
