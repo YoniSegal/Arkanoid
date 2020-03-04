@@ -1,9 +1,9 @@
 package gameobjects;
 
-import gamelogic.Animation;
+import animations.Animation;
 import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
-import gamelogic.KeyPressStoppableAnimation;
+import animations.KeyPressStoppableAnimation;
 
 import java.awt.Color;
 
@@ -49,7 +49,7 @@ public class PauseScreen implements Animation {
         d.setColor(Color.BLUE.brighter().brighter().brighter());
         d.fillRectangle((MAX_WIDTH / 2) + 5, MAX_HEIGHT - 400, 30, 100);
         d.fillRectangle((MAX_WIDTH / 2) - 35, MAX_HEIGHT - 400, 30, 100);
-        KeyPressStoppableAnimation keyPress = new KeyPressStoppableAnimation(keyboard, SPACE_KEY);
+        KeyPressStoppableAnimation keyPress = new KeyPressStoppableAnimation(SPACE_KEY);
         keyPress.doOneFrame(d, dt);
         this.stop = keyPress.shouldStop();
     }

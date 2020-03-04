@@ -1,10 +1,12 @@
 package levels;
 
+import animations.Animation;
+import animations.AnimationRunner;
+import animations.CountdownAnimation;
 import gamelogic.*;
 import gameobjects.*;
 import geometry.Point;
 import biuoop.DrawSurface;
-import biuoop.GUI;
 import biuoop.KeyboardSensor;
 
 import java.awt.Color;
@@ -23,19 +25,14 @@ public class GameLevel implements Animation {
     private static final int RECT_HEIGHT = 40;
     private static final int BORDER_GAP = 10;
     private int numOfBalls;
-    private int paddleWidth;
     private VisitableCollection visitableCollection;
-    private GameEnvironment environment;
-    private GUI gui;
+    private CollidableCollection collidableCollection;
+    //    private GUI gui;
     private Counter blocksRemaining;
     private Counter ballsRemaining;
     private Counter score;
     private Counter lives;
-    private Block deathRegion;
-    private Block upperBlock;
     private Paddle paddle;
-    //    private List<HitListener> hitListeners = new ArrayList<>();
-//    private AnimationRunner runner;
     private boolean running;
     private List<Ball> balls;
     private LevelInformation levelInformation;
@@ -44,23 +41,26 @@ public class GameLevel implements Animation {
     private AnimationRunner animationRunner;
 
     /**
-     * Constructor assigns level information, a keyboard sensor, and anumation runner, a score counter
+     * Constructor assigns level information, a keyboard sensor, and animation runner, a score counter
      * and a lives counter to the level.
      *
      * @param li    Level information.
-     * @param ks    keyboard sensor.
      * @param ar    animation runner.
      * @param score score counter.
      * @param lives lives counter.
      */
-    public GameLevel(LevelInformation li, KeyboardSensor ks, AnimationRunner ar, Counter score, Counter lives) {
+    public GameLevel(LevelInformation li, AnimationRunner ar, Counter score, Counter lives) {
         this.visitableCollection = new VisitableCollection();
-        this.environment = new GameEnvironment();
+        this.collidableCollection = new CollidableCollection();
         this.levelInformation = li;
-        this.keyboardSensor = ks;
+        this.keyboardSensor = MyGUI.getInstance(null, 0, 0).getKeyboardSensor();
         this.animationRunner = ar;
         this.lives = lives;
         this.score = score;
+    }
+
+    public Color getCountDownColour() {
+        return countDownColour;
     }
 
     /**
@@ -100,21 +100,12 @@ public class GameLevel implements Animation {
     }
 
     /**
-     * Constructor assigns GUI to game.
-     *
-     * @param gui GUI used.
-     */
-    public GameLevel(GUI gui) {
-        this.gui = gui;
-    }
-
-    /**
      * Method adds a collidable.
      *
      * @param c collidable.
      */
     public void addCollidable(Collidable c) {
-        this.environment.addCollidable(c);
+        this.collidableCollection.addCollidable(c);
     }
 
     /**
@@ -123,7 +114,7 @@ public class GameLevel implements Animation {
      * @param c Collidable.
      */
     public void removeCollidable(Collidable c) {
-        this.environment.getCollidables().remove(c);
+        this.collidableCollection.getCollidables().remove(c);
     }
 
     /**
@@ -162,15 +153,13 @@ public class GameLevel implements Animation {
         addBackground((Background) levelInformation.getBackground());
         //Set number of balls.
         this.numOfBalls = levelInformation.numberOfBalls();
-        //Create GUI.
-        this.gui = this.animationRunner.getGui();
         //Create colour selection.
         this.blocksRemaining = new Counter(levelInformation.numberOfBlocksToRemove());
         //Set score.
         HitListener scoreTrackingListener = new ScoreTrackingListener(this.score, this);
         //Add blocks to game.
         for (Block s : levelInformation.blocks()) {
-            BlockRemover blockRemover = new BlockRemover(this, s.getHits());
+            BlockRemover blockRemover = new BlockRemover(s.getHits(), this);
             s.addHitListener(blockRemover);
             s.addHitListener(scoreTrackingListener);
             s.addToGame(this);
@@ -179,20 +168,20 @@ public class GameLevel implements Animation {
         //Create walls.
         List<Block> walls = createWalls();
         //Assign top and bottom blocks.
-        this.upperBlock = new Block(new Point(0, 0), MAX_WIDTH, 3 * BORDER_GAP);
-        this.deathRegion = createWalls().get(1);
+        Block upperBlock = new Block(new Point(0, 0), MAX_WIDTH, 3 * BORDER_GAP);
+//        Block deathRegion = walls.get(1);
         //Add score indicator.
-        ScoreIndicator scoreIndicator = new ScoreIndicator(this.score, this.upperBlock);
+        ScoreIndicator scoreIndicator = new ScoreIndicator(this.score, upperBlock);
         scoreIndicator.addToGame(this);
         //Add lives indicator.
-        LivesIndicator livesIndicator = new LivesIndicator(this.lives, this.upperBlock);
+        LivesIndicator livesIndicator = new LivesIndicator(this.lives, upperBlock);
         livesIndicator.addToGame(this);
         //Add level indicator.
-        LevelIndicator levelIndicator = new LevelIndicator(this.lives, this.upperBlock, levelInformation);
+        LevelIndicator levelIndicator = new LevelIndicator(this.lives, upperBlock, levelInformation);
         levelIndicator.addToGame(this);
         //Add walls to game.
-        for (int j = 0; j < walls.size(); j++) {
-            walls.get(j).addToGame(this);
+        for (Block wall : walls) {
+            wall.addToGame(this);
         }
     }
 
@@ -201,6 +190,7 @@ public class GameLevel implements Animation {
      *
      * @return boolean.
      */
+    @Override
     public boolean shouldStop() {
         return !this.running;
     }
@@ -210,6 +200,7 @@ public class GameLevel implements Animation {
      *
      * @param stop - boolean.
      */
+    @Override
     public void setStop(boolean stop) {
 
     }
@@ -220,6 +211,7 @@ public class GameLevel implements Animation {
      * @param d  DrawSurface.
      * @param dt change in time.
      */
+    @Override
     public void doOneFrame(DrawSurface d, double dt) {
         this.visitableCollection.visitAll(d);
         if (this.blocksRemaining.getValue() == 0) {
@@ -234,10 +226,14 @@ public class GameLevel implements Animation {
         if (this.lives.getValue() == 0) {
             this.running = false;
         }
-        if (this.gui.getKeyboardSensor().isPressed("p")) {
-            this.animationRunner.run(new PauseScreen(this.gui.getKeyboardSensor()));
+        if (this.keyboardSensor.isPressed("p")) {
+            this.animationRunner.run(new PauseScreen(this.keyboardSensor));
         }
         visitableCollection.notifyAllTimePassed(dt);
+    }
+
+    public VisitableCollection getVisitableCollection() {
+        return visitableCollection;
     }
 
     /**
@@ -261,9 +257,7 @@ public class GameLevel implements Animation {
     public void removePaddleAndBalls() {
         removeVisitable(this.paddle);
         removeCollidable(this.paddle);
-        for (int i = 0; i < this.balls.size(); i++) {
-            removeVisitable(this.balls.get(i));
-        }
+        visitableCollection.getVisitables().removeAll(this.balls);
     }
 
     /**
@@ -319,23 +313,11 @@ public class GameLevel implements Animation {
      * Method creates game's balls.
      */
     public void createBall() {
-        //Create new gameobjects.Ball.
+        //Create new Ball.
         this.balls = levelInformation.balls();
-//        this.balls = new Ball[numOfBalls];
-//        for (int i = 0; i < this.numOfBalls; i++) {
-//            int x = (int) levelInformation.balls().get(i).getX();
-//            int y = (int) levelInformation.balls().get(i).getY();
-//            int r = levelInformation.balls().get(i).getR();
-//            Color color = levelInformation.balls().get(i).getColor();
-//            this.balls[i] = new Ball(x, y, r, color);
-//            Velocity v = levelInformation.initialBallVelocities().get(i);
-//            //Set ball's velocity.
-//            this.balls[i].setVelocity(v);
-//        this.balls[i].setGameEnvironment(environment);
         for (Ball ball : balls) {
-            ball.setGameEnvironment(environment);
+            ball.setCollidableCollection(collidableCollection);
         }
-//        }
     }
 
     /**
@@ -345,10 +327,10 @@ public class GameLevel implements Animation {
      */
     public Paddle createPaddle() {
         //Assign keyboard sensor
-        this.paddleWidth = levelInformation.paddleWidth();
+        int paddleWidth = levelInformation.paddleWidth();
         Point point = new Point((double) MAX_WIDTH / 2 - (paddleWidth / 2), MAX_HEIGHT - (RECT_HEIGHT / 2));
         //Create paddle.
-        Paddle p = new Paddle(this.keyboardSensor, point, this.paddleWidth, RECT_HEIGHT / 4);
+        Paddle p = new Paddle(this.keyboardSensor, point, paddleWidth, RECT_HEIGHT / 4);
         p.setDistance(levelInformation.paddleSpeed());
         return p;
     }

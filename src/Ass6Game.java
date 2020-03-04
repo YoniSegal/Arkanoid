@@ -1,16 +1,12 @@
-import biuoop.GUI;
-import gamelogic.AnimationRunner;
+import animations.AnimationRunner;
+import gamelogic.MyGUI;
 import gameobjects.Menu;
-import gameobjects.MenuAnimation;
-import tasks.ExitTask;
-import tasks.ShowHiScoresTask;
-import tasks.ShowSubMenuTask;
-import tasks.Task;
+import animations.MenuAnimation;
+import tasks.*;
 
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class initialises and runs game.
@@ -29,22 +25,29 @@ public class Ass6Game {
      * @throws FileNotFoundException if file can't be found.
      */
     public static void main(String[] args) throws FileNotFoundException {
-        GUI gui = new GUI("Arkanoid", MAX_WIDTH, MAX_HEIGHT);
-        AnimationRunner runner = new AnimationRunner(60, gui);
-        Menu<Task<Void>> menu = new MenuAnimation<Task<Void>>(gui.getKeyboardSensor());
-        ShowHiScoresTask showHiScoresTask = new ShowHiScoresTask(runner);
+        MyGUI gui = MyGUI.getInstance("Arkanoid", MAX_WIDTH, MAX_HEIGHT);
+        AnimationRunner runner = new AnimationRunner(60);
+        Menu<Task<Void>> menu = new MenuAnimation<Task<Void>>();
+        ShowHighScoresTask showHighScoresTask = new ShowHighScoresTask(runner, "highscores.txt");
+
 
         //Get path
         String filePath = checkArgs(args);
 
-        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(is);
-        Reader reader = inputStreamReader;
+        Map<Tasks, BaseTask> map = new HashMap<Tasks, BaseTask>() {{
+            put(Tasks.EXIT, new ExitTask());
+            put(Tasks.PLAY_GAME, new PlayGameTask(runner, filePath));
+            put(Tasks.SHOW_HIGH_SCORES, new ShowHighScoresTask(runner, "highscores.txt"));
+            put(Tasks.SHOW_SUB_MENU, new ShowSubMenuTask(runner, filePath));
+        }};
+
+//        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(filePath);
+//        Reader reader = new InputStreamReader(is);
 
 
         //Assign menu.
-        menu.addSelection("s", "Start game", new ShowSubMenuTask(runner, gui.getKeyboardSensor(), filePath, reader));
-        menu.addSelection("h", "Hi scores", showHiScoresTask);
+        menu.addSelection("s", "Start game", map.get(Tasks.SHOW_SUB_MENU));
+        menu.addSelection("h", "Hi scores", showHighScoresTask);
         menu.addSelection("q", "Quit", new ExitTask());
         //Loop through menu.
         while (true) {
@@ -52,7 +55,7 @@ public class Ass6Game {
             runner.run(menu);
             // wait for user selection
             Task<Void> task = menu.getStatus();
-            showHiScoresTask.getHsa().setStop(false);
+            showHighScoresTask.getHighScoreAnimation().setStop(false);
             task.run();
         }
     }

@@ -20,7 +20,7 @@ public class Ball implements Visitable {
     private int r;
     private Velocity velocity;
     private Color colour;
-    private GameEnvironment gameEnvironment;
+    private CollidableCollection collidableCollection;
 
     /**
      * Constructor assigns centre point, radius, velocity and colour.
@@ -113,8 +113,8 @@ public class Ball implements Visitable {
      *
      * @param environment GameLogic.GameEnvironment.
      */
-    public void setGameEnvironment(GameEnvironment environment) {
-        this.gameEnvironment = environment;
+    public void setCollidableCollection(CollidableCollection environment) {
+        this.collidableCollection = environment;
     }
 
     /**
@@ -147,7 +147,7 @@ public class Ball implements Visitable {
         //Calculate trajectory of object.
         Line trajectory = new Line(this.getCentre(), newPos);
         //Get collision points.
-        CollisionInfo collisionInfo = this.gameEnvironment.getClosestCollision(trajectory);
+        CollisionInfo collisionInfo = this.collidableCollection.getClosestCollision(trajectory);
         //If ball collided.
         if (collisionInfo != null) {
             Collidable c = collisionInfo.collisionObject();

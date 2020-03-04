@@ -10,19 +10,20 @@ import levels.GameLevel;
  * @author Yonatan Segal
  * @version 1
  */
-public class BallRemover implements HitListener {
-    private Counter numBalls;
-    private GameLevel gameLevel;
+public class BallRemover extends CounterHitListener {
+//    private Counter counter;
+//    private GameLevel gameLevel;
 
     /**
      * Constructor assigns the number of balls and a game level.
      *
-     * @param numBalls Counter.
+     * @param numBalls  Counter.
      * @param gameLevel GameLevel.
      */
     public BallRemover(Counter numBalls, GameLevel gameLevel) {
-        this.numBalls = numBalls;
-        this.gameLevel = gameLevel;
+        super(numBalls, gameLevel);
+//        this.counter = numBalls;
+//        this.gameLevel = gameLevel;
     }
 
     /**
@@ -33,7 +34,7 @@ public class BallRemover implements HitListener {
      * @param hitter   gameobjects.Ball hitting.
      */
     public void hitEvent(Block beingHit, Ball hitter) {
-        if (numBalls.getValue() > 0) {
+        if (counter.getValue() > 0) {
             hitter.removeFromGame(this.gameLevel);
             this.gameLevel.getBallsRemaining().decrease(1);
         }

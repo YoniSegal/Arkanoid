@@ -10,19 +10,20 @@ import levels.GameLevel;
  * @author Yonatan Segal
  * @version 1
  */
-public class BlockRemover implements HitListener {
-    private GameLevel gameLevel;
-    private Counter remainingBlocks;
+public class BlockRemover extends CounterHitListener {
+//    private GameLevel gameLevel;
+//    private Counter counter;
 
     /**
      * Constructor receives a GameLevel and counter and assigns them to BlockRemover.
      *
-     * @param gameLevel       GameLevel being played.
      * @param remainingBlocks number of blocks removed.
+     * @param gameLevel       GameLevel being played.
      */
-    public BlockRemover(GameLevel gameLevel, Counter remainingBlocks) {
-        this.gameLevel = gameLevel;
-        this.remainingBlocks = remainingBlocks;
+    public BlockRemover(Counter remainingBlocks, GameLevel gameLevel) {
+        super(remainingBlocks,gameLevel);
+//        this.gameLevel = gameLevel;
+//        this.counter = remainingBlocks;
     }
 
     /**

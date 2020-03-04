@@ -1,6 +1,6 @@
 package gameobjects;
 
-import gamelogic.Animation;
+import animations.Animation;
 
 /**
  * Interface allows a submenu to be added and have options added to it to get their status'.

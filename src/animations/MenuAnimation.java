@@ -1,30 +1,43 @@
-package gameobjects;
+package animations;
 
 import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
+import animations.Animation;
 import animations.KeyPressStoppableAnimation;
+import gamelogic.MyGUI;
 import gamelogic.SpriteVisitor;
+import gameobjects.ColourBackground;
+import gameobjects.Menu;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class runs a submenu.
+ * Class runs a menuAnimation.
  *
  * @param <T> generic task.
  * @author Yonatan Segal
  * @version 1
  */
-public class SubMenu<T> implements Menu<T> {
-    private boolean stop;
+public class MenuAnimation<T> extends StoppableAnimation implements Menu<T> {
     private KeyboardSensor keyboard;
-    //private String message;
-    private java.util.List<String> keys;
-    private java.util.List<String> messages;
+    private List<String> keys;
+    private List<String> messages;
     private List<T> returnVals;
     private ArrayList<KeyPressStoppableAnimation> keydetect;
     private int hitkey;
+
+    /**
+     * Constructor sets arrayLists and keyboard.
+     */
+    public MenuAnimation() {
+        this.keys = new ArrayList<>();
+        this.messages = new ArrayList<>();
+        this.returnVals = new ArrayList<>();
+        this.keyboard = MyGUI.getInstance(null, 0, 0).getKeyboardSensor();
+        this.keydetect = new ArrayList<>();
+    }
 
     /**
      * Method adds options for menu selection.
@@ -33,8 +46,12 @@ public class SubMenu<T> implements Menu<T> {
      * @param message   String.
      * @param returnVal T - our return value.
      */
+    @Override
     public void addSelection(String key, String message, T returnVal) {
-
+        this.keys.add(key);
+        this.messages.add(message);
+        this.returnVals.add(returnVal);
+        this.keydetect.add(new KeyPressStoppableAnimation(key));
     }
 
     /**
@@ -42,9 +59,10 @@ public class SubMenu<T> implements Menu<T> {
      *
      * @return T - status.
      */
+    @Override
     public T getStatus() {
         for (int i = 0; i < keydetect.size(); i++) {
-            if (this.stop) {
+            if (this.shouldStop) {
                 return returnVals.get(this.hitkey);
             }
         }
@@ -58,6 +76,7 @@ public class SubMenu<T> implements Menu<T> {
      * @param message String.
      * @param subMenu Menu - submenu.
      */
+    @Override
     public void addSubMenu(String key, String message, Menu<T> subMenu) {
 
     }
@@ -68,6 +87,7 @@ public class SubMenu<T> implements Menu<T> {
      * @param d  DrawSurface.
      * @param dt change in time.
      */
+    @Override
     public void doOneFrame(DrawSurface d, double dt) {
         ColourBackground colourBackground = new ColourBackground(Color.GRAY);
         colourBackground.accept(new SpriteVisitor(d));
@@ -79,27 +99,11 @@ public class SubMenu<T> implements Menu<T> {
         }
         for (int j = 0; j < keys.size(); j++) {
             if (keyboard.isPressed(keys.get(j))) {
-                this.stop = true;
+                this.shouldStop = true;
                 this.hitkey = j;
             }
+            //keydetect.get(j).doOneFrame(d, dt);
+            //this.stop = keydetect.get(j).shouldStop();
         }
-    }
-
-    /**
-     * Method determines the stopping condition.
-     *
-     * @return boolean.
-     */
-    public boolean shouldStop() {
-        return this.stop;
-    }
-
-    /**
-     * Method assigns stopping condition for animation.
-     *
-     * @param s - boolean.
-     */
-    public void setStop(boolean s) {
-        this.stop = s;
     }
 }

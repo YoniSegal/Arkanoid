@@ -13,9 +13,9 @@ import java.util.List;
  * @author Yonatan Segal
  * @version 1
  */
-public class ScoreTrackingListener implements HitListener {
-    private Counter currentScore;
-    private GameLevel gameLevel;
+public class ScoreTrackingListener extends CounterHitListener {
+//    private Counter counter;
+//    private GameLevel gameLevel;
     private List<HitListener> hitListeners = new ArrayList();
 
     /**
@@ -25,8 +25,9 @@ public class ScoreTrackingListener implements HitListener {
      * @param gameLevel    GameLevel.
      */
     public ScoreTrackingListener(Counter currentScore, GameLevel gameLevel) {
-        this.currentScore = currentScore;
-        this.gameLevel = gameLevel;
+        super(currentScore,gameLevel);
+//        this.counter = currentScore;
+//        this.gameLevel = gameLevel;
     }
 
     /**
@@ -58,11 +59,11 @@ public class ScoreTrackingListener implements HitListener {
         //hitting block - 5 points
         //destroying block - 10 points
         if (beingHit.getHits().getValue() > 0) {
-            this.currentScore.increase(5);
+            this.counter.increase(5);
             beingHit.addHit();
         }
         if (beingHit.getHits().getValue() == 0) {
-            this.currentScore.increase(10);
+            this.counter.increase(10);
             removeHitListener(this);
         }
     }

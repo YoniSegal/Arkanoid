@@ -1,9 +1,8 @@
 package tasks;
 
-import biuoop.KeyboardSensor;
-import gamelogic.AnimationRunner;
+import animations.AnimationRunner;
 import gameobjects.Menu;
-import gameobjects.MenuAnimation;
+import animations.MenuAnimation;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,25 +17,16 @@ import java.io.Reader;
  * @author Yonatan Segal
  * @version 1
  */
-public class ShowSubMenuTask implements Task<Void> {
-    private KeyboardSensor keyboardSensor;
-    private AnimationRunner runner;
-    private String filePath;
-    private Reader fileReader;
+public class ShowSubMenuTask extends BaseTask {
 
     /**
      * Constructor sets a keyboard animationRunner and filePath.
      *
-     * @param runner         AnimationRunner.
-     * @param keyboardSensor KeyboardSensor.
-     * @param filePath       String.
-     * @param fileReader     Reader.
+     * @param runner   AnimationRunner.
+     * @param filePath String.
      */
-    public ShowSubMenuTask(AnimationRunner runner, KeyboardSensor keyboardSensor, String filePath, Reader fileReader) {
-        this.keyboardSensor = keyboardSensor;
-        this.runner = runner;
-        this.filePath = filePath;
-        this.fileReader = fileReader;
+    public ShowSubMenuTask(AnimationRunner runner, String filePath) {
+        super(runner, filePath);
     }
 
     /**
@@ -46,7 +36,7 @@ public class ShowSubMenuTask implements Task<Void> {
      */
     public Void run() {
         try {
-            readLeveles();
+            readLevels();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -58,13 +48,10 @@ public class ShowSubMenuTask implements Task<Void> {
      *
      * @throws FileNotFoundException exception.
      */
-    public void readLeveles() throws FileNotFoundException {
-        Menu<Task<Void>> menu = new MenuAnimation<Task<Void>>(keyboardSensor);
-        ShowHiScoresTask showHiScoresTask = new ShowHiScoresTask(runner);
-
+    private void readLevels() throws FileNotFoundException {
+        Menu<Task<Void>> menu = new MenuAnimation<>();
         InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(this.filePath);
-        InputStreamReader inputStreamReader = new InputStreamReader(is);
-        Reader reader = inputStreamReader;
+        Reader reader = new InputStreamReader(is);
         LineNumberReader lnr = new LineNumberReader(reader);
 
         try {
@@ -87,7 +74,7 @@ public class ShowSubMenuTask implements Task<Void> {
                     definitionsChecked = true;
                 }
                 if (keyAndMessageChecked && definitionsChecked) {
-                    menu.addSelection(key, message, new PlayGameTask(runner, path, reader));
+                    menu.addSelection(key, message, new PlayGameTask(runner, path));
                     keyAndMessageChecked = false;
                     definitionsChecked = false;
                 }
@@ -98,7 +85,6 @@ public class ShowSubMenuTask implements Task<Void> {
                 runner.run(menu);
                 // wait for user selection
                 Task<Void> task = menu.getStatus();
-                showHiScoresTask.getHsa().setStop(false);
                 task.run();
                 break;
             }

@@ -1,17 +1,16 @@
 package gamelogic;
 
+import animations.*;
 import biuoop.DialogManager;
-import biuoop.GUI;
-import gameobjects.FinalScreenAnimation;
-import biuoop.KeyboardSensor;
-import gameobjects.HighScoresAnimation;
 import gameobjects.HighScoresTable;
 import levels.GameLevel;
 import levels.LevelInformation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static biuoop.KeyboardSensor.SPACE_KEY;
 
@@ -23,31 +22,24 @@ import static biuoop.KeyboardSensor.SPACE_KEY;
  */
 public class GameFlow {
     private AnimationRunner ar;
-    private KeyboardSensor ks;
     private Counter score;
     private Counter lives;
     private HighScoresTable highScoresTable;
-    private GUI gui;
     private boolean win;
-    private static final int MAX_WIDTH = 800;
-    private static final int MAX_HEIGHT = 600;
 
     /**
      * Constructor creates new counter holding the number of lives and score. It
      * also assigns a new keyboard sensor and animation runner.
      *
-     * @param ar  AnimationRunner.
-     * @param ks  KeyboardSensor.
-     * @param gui GUI.
+     * @param ar AnimationRunner.
      */
-    public GameFlow(AnimationRunner ar, KeyboardSensor ks, GUI gui) {
+    public GameFlow(AnimationRunner ar) {
         this.ar = ar;
-        this.ks = ks;
         this.score = new Counter(0);
         this.lives = new Counter(7);
         this.highScoresTable = new HighScoresTable(10);
         this.win = true;
-        this.gui = gui;
+
         File file = new File("highscores.txt");
         if (file.exists() && !file.isDirectory()) {
             try {
@@ -72,15 +64,9 @@ public class GameFlow {
      * @param levels List of levels.
      */
     public void runLevels(List<LevelInformation> levels) {
-        int i = 0;
         for (LevelInformation levelInfo : levels) {
-            if (i != 0) {
-                this.score.increase(100);
-            }
-            GameLevel level = new GameLevel(levelInfo, ks, ar, score, lives);
+            GameLevel level = new GameLevel(levelInfo, ar, score, lives);
             level.initialize();
-            i++;
-
             while (level.getBlocksRemaining().getValue() != 0 && level.getLives().getValue() != 0) {
                 level.playOneTurn();
             }
@@ -88,13 +74,14 @@ public class GameFlow {
                 this.win = false;
                 break;
             }
+            this.score.increase(100);
         }
 
-        this.ar.run(new FinalScreenAnimation(ks, this.win, this.score.getValue(), ar));
+        this.ar.run(new FinalScreenAnimation(win, score.getValue()));
         if (this.score.getValue() >= 0 && this.highScoresTable.size() <= 5) {
             saveScoreToFile(this.score.getValue());
         }
-        this.ar.run(new HighScoresAnimation(highScoresTable, SPACE_KEY, ks, ar));
+        this.ar.run(new HighScoresAnimation(highScoresTable));
 
     }
 
@@ -104,7 +91,7 @@ public class GameFlow {
      * @param s int.
      */
     public void saveScoreToFile(int s) {
-        DialogManager dialog = gui.getDialogManager();
+        DialogManager dialog = MyGUI.getInstance(null, 0, 0).getDialogManager();
         String name = dialog.showQuestionDialog("Name", "What is your name?", "Anonymous");
         ScoreInfo scoreInfo = new ScoreInfo(name, s);
         highScoresTable.add(scoreInfo);

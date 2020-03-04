@@ -133,7 +133,6 @@ public class LevelSpecificationReader {
         }
         if (line.contains("ball_velocities")) {
             List<Velocity> ballVelocities = readVelocities(line);
-            //level.setBallVelocities(readVelocities(line));
             level.setBalls(readBalls(ballVelocities));
             level.setNumOfBalls(level.getBalls().size());
         }

@@ -6,7 +6,11 @@ package tasks;
  * @author Yonatan Segal
  * @version 1
  */
-public class ExitTask implements Task<Void> {
+public class ExitTask extends BaseTask {
+    public ExitTask() {
+        super(null, null);
+    }
+
     /**
      * Method carries out a particular action and returns a generic value.
      *
