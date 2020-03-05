@@ -1,4 +1,5 @@
 import animations.AnimationRunner;
+import biuoop.GUI;
 import gamelogic.MyGUI;
 import gameobjects.Menu;
 import animations.MenuAnimation;
@@ -25,7 +26,7 @@ public class Ass6Game {
      * @throws FileNotFoundException if file can't be found.
      */
     public static void main(String[] args) throws FileNotFoundException {
-        MyGUI gui = MyGUI.getInstance("Arkanoid", MAX_WIDTH, MAX_HEIGHT);
+        GUI gui = MyGUI.getInstance("Arkanoid", MAX_WIDTH, MAX_HEIGHT);
         AnimationRunner runner = new AnimationRunner(60);
         Menu<Task<Void>> menu = new MenuAnimation<Task<Void>>();
         ShowHighScoresTask showHighScoresTask = new ShowHighScoresTask(runner, "highscores.txt");

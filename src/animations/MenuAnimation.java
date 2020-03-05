@@ -2,8 +2,6 @@ package animations;
 
 import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
-import animations.Animation;
-import animations.KeyPressStoppableAnimation;
 import gamelogic.MyGUI;
 import gamelogic.SpriteVisitor;
 import gameobjects.ColourBackground;

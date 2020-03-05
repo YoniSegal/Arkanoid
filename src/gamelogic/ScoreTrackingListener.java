@@ -31,15 +31,6 @@ public class ScoreTrackingListener extends CounterHitListener {
     }
 
     /**
-     * Add hl as a listener to hit events.
-     *
-     * @param hl GameLogic.HitListener.
-     */
-    public void addHitListener(HitListener hl) {
-        this.hitListeners.add(hl);
-    }
-
-    /**
      * Remove hl from the list of listeners to hit events.
      *
      * @param hl GameLogic.HitListener.

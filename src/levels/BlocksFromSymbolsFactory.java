@@ -91,22 +91,4 @@ public class BlocksFromSymbolsFactory {
     public void setSpacerWidths(Map<String, Integer> stringIntegerMap) {
         this.spacerWidths = stringIntegerMap;
     }
-
-    /**
-     * method returns a map from symbols to blockcreators.
-     *
-     * @return map.
-     */
-    public Map<String, BlockMaker> getBlockCreators() {
-        return blockCreators;
-    }
-
-    /**
-     * Method returns map from symbols to speacerwidths.
-     *
-     * @return map.
-     */
-    public Map<String, Integer> getSpacerWidths() {
-        return spacerWidths;
-    }
 }

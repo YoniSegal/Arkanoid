@@ -8,11 +8,7 @@ import levels.LevelInformation;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static biuoop.KeyboardSensor.SPACE_KEY;
 
 /**
  * Class calls for levels to be initialised and loops through each level.
