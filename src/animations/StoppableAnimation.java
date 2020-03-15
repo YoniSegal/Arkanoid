@@ -1,13 +1,9 @@
 package animations;
 
-import biuoop.DrawSurface;
 
-public class StoppableAnimation implements Animation {
+public abstract class StoppableAnimation implements Animation {
     protected boolean shouldStop = false;
 
-    @Override
-    public void doOneFrame(DrawSurface d, double dt) {
-    }
 
     /**
      * Method determines the stopping condition.

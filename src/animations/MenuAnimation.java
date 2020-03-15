@@ -100,8 +100,6 @@ public class MenuAnimation<T> extends StoppableAnimation implements Menu<T> {
                 this.shouldStop = true;
                 this.hitkey = j;
             }
-            //keydetect.get(j).doOneFrame(d, dt);
-            //this.stop = keydetect.get(j).shouldStop();
         }
     }
 }

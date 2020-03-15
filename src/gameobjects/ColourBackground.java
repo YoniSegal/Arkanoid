@@ -45,6 +45,7 @@ public class ColourBackground implements Visitable, Background {
      *
      * @param dt change in time.
      */
+    @Override
     public void timePassed(double dt) {
 
     }
@@ -54,6 +55,7 @@ public class ColourBackground implements Visitable, Background {
      *
      * @return Colour.
      */
+    @Override
     public Color getColour() {
         return this.color;
     }

@@ -1,6 +1,5 @@
 package gameobjects;
 
-import biuoop.DrawSurface;
 import gamelogic.Visitable;
 import gamelogic.Visitor;
 
@@ -39,6 +38,7 @@ public class ImageBackground implements Visitable, Background {
      *
      * @param dt change in time.
      */
+    @Override
     public void timePassed(double dt) {
 
     }
@@ -48,6 +48,7 @@ public class ImageBackground implements Visitable, Background {
      *
      * @return Colour.
      */
+    @Override
     public Color getColour() {
         return null;
     }
@@ -57,6 +58,7 @@ public class ImageBackground implements Visitable, Background {
      *
      * @return BufferedImage.
      */
+    @Override
     public BufferedImage getImage() {
         return image;
     }

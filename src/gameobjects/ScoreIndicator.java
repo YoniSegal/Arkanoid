@@ -11,9 +11,7 @@ import gamelogic.Visitor;
  * @author Yonatan Segal
  * @version 1
  */
-public class ScoreIndicator implements Visitable {
-    private Counter score;
-    private Block upperBlock;
+public class ScoreIndicator extends Indicator {
 
     /**
      * Contructor assigns a counter for the score and the upperBlock.
@@ -22,36 +20,11 @@ public class ScoreIndicator implements Visitable {
      * @param upperBlock Block.
      */
     public ScoreIndicator(Counter score, Block upperBlock) {
-        this.score = score;
-        this.upperBlock = upperBlock;
-    }
-
-    public Block getUpperBlock() {
-        return upperBlock;
+        super(score, upperBlock);
     }
 
     public Counter getScore() {
-        return score;
-    }
-
-
-    /**
-     * Method adds block as a gameobjects.Sprite and a gameobjects.Collidable to the gameLevel.
-     *
-     * @param gameLevel GameLogic.GameLevel - gameLevel being played.
-     */
-    public void addToGame(GameLevel gameLevel) {
-        gameLevel.addVisitable(this);
-    }
-
-
-    /**
-     * Method notifies the sprite that time has passed.
-     *
-     * @param dt change in time.
-     */
-    public void timePassed(double dt) {
-
+        return counter;
     }
 
     @Override

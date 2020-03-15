@@ -20,15 +20,11 @@ import java.util.List;
  * @version 1
  */
 public class Green3 extends Level {
-    private static final int BLOCKS_TO_REMOVE = 40;
     private static final int NUM_OF_BALLS = 2;
-    //    private static final int NUM_OF_LIVES = 4;
     private static final int PADDLE_SPEED = 100;
     private static final int BALL_SPEED = 300;
     private static final int RECT_WIDTH = 50;
     private static final int RECT_HEIGHT = 25;
-    //    private static final int BLOCK_LIFE = 1;
-//    private Color color = Color.BLACK;
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 600;
     private static final int BORDER_GAP = 10;
@@ -50,7 +46,7 @@ public class Green3 extends Level {
      *
      * @return list of velocities.
      */
-    public List<Velocity> initialBallVelocities() {
+    private List<Velocity> initialBallVelocities() {
         List<Velocity> velocities = new ArrayList<>();
         velocities.add(0, Velocity.fromAngleAndSpeed(45, BALL_SPEED));
         velocities.add(1, Velocity.fromAngleAndSpeed(-45, BALL_SPEED));
@@ -94,7 +90,7 @@ public class Green3 extends Level {
      * @param block Block.
      * @param i     int - row.
      */
-    public void setColor(Block block, int i) {
+    private void setColor(Block block, int i) {
         block.setStroke(Color.BLACK);
         if (i < 1) {
             block.setFill(new HashMap<Integer, Background>() {{

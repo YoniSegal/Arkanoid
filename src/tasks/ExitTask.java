@@ -16,6 +16,7 @@ public class ExitTask extends BaseTask {
      *
      * @return T - generic value.
      */
+    @Override
     public Void run() {
         System.exit(0);
         return null;

@@ -11,9 +11,6 @@ import levels.GameLevel;
  * @version 1
  */
 public class BlockRemover extends CounterHitListener {
-//    private GameLevel gameLevel;
-//    private Counter counter;
-
     /**
      * Constructor receives a GameLevel and counter and assigns them to BlockRemover.
      *
@@ -21,9 +18,7 @@ public class BlockRemover extends CounterHitListener {
      * @param gameLevel       GameLevel being played.
      */
     public BlockRemover(Counter remainingBlocks, GameLevel gameLevel) {
-        super(remainingBlocks,gameLevel);
-//        this.gameLevel = gameLevel;
-//        this.counter = remainingBlocks;
+        super(remainingBlocks, gameLevel);
     }
 
     /**
@@ -34,6 +29,7 @@ public class BlockRemover extends CounterHitListener {
      * @param beingHit gameobjects.Block being hit.
      * @param hitter   gameobjects.Ball hitting.
      */
+    @Override
     public void hitEvent(Block beingHit, Ball hitter) {
         if (beingHit.getHits().getValue() == 1) {
             beingHit.removeFromGame(this.gameLevel);

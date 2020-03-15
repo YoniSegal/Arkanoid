@@ -24,11 +24,8 @@ public class PauseScreen implements Animation {
     /**
      * Constructor assigns a keyboard sensor and determines whether the
      * animation should continue.
-     *
-     * @param k KeyboardSensor.
      */
-    public PauseScreen(KeyboardSensor k) {
-        this.keyboard = k;
+    public PauseScreen() {
         this.stop = false;
     }
 
@@ -38,6 +35,7 @@ public class PauseScreen implements Animation {
      * @param d  DrawSurface.
      * @param dt change in time.
      */
+    @Override
     public void doOneFrame(DrawSurface d, double dt) {
         d.drawText((MAX_WIDTH / 2) - 210, MAX_HEIGHT / 2 + 100, "paused -- press space to continue", 32);
         d.setColor(Color.BLACK);
@@ -59,6 +57,7 @@ public class PauseScreen implements Animation {
      *
      * @return boolean.
      */
+    @Override
     public boolean shouldStop() {
         return this.stop;
     }
@@ -68,6 +67,7 @@ public class PauseScreen implements Animation {
      *
      * @param s - boolean.
      */
+    @Override
     public void setStop(boolean s) {
 
     }

@@ -1,7 +1,6 @@
 package gameobjects;
 
 import gamelogic.*;
-import levels.GameLevel;
 import levels.LevelInformation;
 
 /**
@@ -10,9 +9,7 @@ import levels.LevelInformation;
  * @author Yonatan Segal
  * @version 1
  */
-public class LevelIndicator implements Visitable {
-    private Counter lives;
-    private Block upperBlock;
+public class LevelIndicator extends Indicator {
     private LevelInformation levelInformation;
 
     /**
@@ -24,37 +21,13 @@ public class LevelIndicator implements Visitable {
      * @param levelInformation LevelInformation.
      */
     public LevelIndicator(Counter lives, Block upperBlock, LevelInformation levelInformation) {
-        this.lives = lives;
-        this.upperBlock = upperBlock;
+        super(lives, upperBlock);
         this.levelInformation = levelInformation;
     }
 
 
     public LevelInformation getLevelInformation() {
         return levelInformation;
-    }
-
-    public Block getUpperBlock() {
-        return upperBlock;
-    }
-
-    /**
-     * Method adds block as a gameobjects.Sprite and a gameobjects.Collidable to the gameLevel.
-     *
-     * @param gameLevel GameLogic.GameLevel - gameLevel being played.
-     */
-    public void addToGame(GameLevel gameLevel) {
-//        gameLevel.addSprite(this);
-        gameLevel.addVisitable(this);
-    }
-
-    /**
-     * Method notifies the sprite that time has passed.
-     *
-     * @param dt change in time.
-     */
-    public void timePassed(double dt) {
-
     }
 
     @Override

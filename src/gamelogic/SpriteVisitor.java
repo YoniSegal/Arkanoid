@@ -68,7 +68,7 @@ public class SpriteVisitor implements Visitor {
         surface.setColor(Color.BLACK);
         surface.drawRectangle(upperleftX, upperleftY, width, height);
         //Draw score.
-        String hit = "Score: " + Integer.toString(scoreIndicator.getScore().getValue());
+        String hit = "Score: " + scoreIndicator.getScore().getValue();
         int x = (int) scoreIndicator.getUpperBlock().getCollisionRectangle().getTop().middle().getX() - 30;
         int y = (int) scoreIndicator.getUpperBlock().getCollisionRectangle().getLeft().middle().getY() + 10;
         surface.setColor(Color.BLACK);
@@ -117,4 +117,5 @@ public class SpriteVisitor implements Visitor {
         surface.setColor(ball.getColor());
         surface.fillCircle((int) ball.getX(), (int) ball.getY(), ball.getR());
     }
+
 }

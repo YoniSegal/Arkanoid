@@ -79,6 +79,7 @@ public class Paddle implements Visitable, Collidable {
      *
      * @param dt change in time.
      */
+    @Override
     public void timePassed(double dt) {
         //Check if left key was pressed.
         if (keyboard.isPressed(KeyboardSensor.LEFT_KEY)) {
@@ -95,6 +96,7 @@ public class Paddle implements Visitable, Collidable {
      *
      * @return geometry.Rectangle.
      */
+    @Override
     public Rectangle getCollisionRectangle() {
         return this.rectangle;
     }
@@ -108,6 +110,7 @@ public class Paddle implements Visitable, Collidable {
      * @param hitter          Ball.
      * @return new GameLogic.Velocity.
      */
+    @Override
     public Velocity hit(Ball hitter, Point collisionPoint, Velocity currentVelocity) {
         Velocity newVelocity = getNewVelocity(collisionPoint, currentVelocity);
         return newVelocity;

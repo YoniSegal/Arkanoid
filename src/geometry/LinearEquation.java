@@ -25,10 +25,6 @@ public class LinearEquation implements Equation {
         return this.yIntercept;
     }
 
-    @Override
-    public boolean isPointOnCurve(Point point) {
-        return Math.abs(point.getY() - this.gradient * point.getX() + this.yIntercept) < EPSILON;
-    }
 
     private double calculateGradient(Line line) {
         double inf = Double.POSITIVE_INFINITY;

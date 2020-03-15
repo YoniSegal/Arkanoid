@@ -57,14 +57,9 @@ public class CollidableCollection {
             Collidable collidable = collidables.get(i);
             Point collisionPoint;
             //Get closest intersection point.
-//            collisionPoint = trajectory.closestIntersectionToStartOfLine(collidable.getCollisionRectangle());
             collisionPoint = lineRectangleCompare.closestIntersectionToStartOfLine(trajectory, collidable.getCollisionRectangle());
-            if (collisionPoint == null) {
-                continue;
-            } else {
-                //Fill collision information.
-                CollisionInfo newCollisionInfo = new CollisionInfo(collisionPoint, collidable);
-                return newCollisionInfo;
+            if (collisionPoint != null) {
+                return new CollisionInfo(collisionPoint, collidable);
             }
         }
         return null;

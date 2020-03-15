@@ -85,7 +85,7 @@ public class FinalFour extends Level {
      * @param block Block.
      * @param i     Row.
      */
-    public void setColor(Block block, int i) {
+    private void setColor(Block block, int i) {
         block.setStroke(Color.BLACK);
         if (i < 1) {
             block.setFill(new HashMap<Integer, Background>() {{

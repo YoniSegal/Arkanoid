@@ -1,13 +1,10 @@
 package levels;
 
-import gamelogic.Velocity;
 import gamelogic.Visitable;
-import gameobjects.Background;
 import gameobjects.Ball;
 import gameobjects.Block;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.util.List;
 
 /**
@@ -56,6 +53,7 @@ public class Level implements LevelInformation {
      *
      * @return int number of balls in the level.
      */
+    @Override
     public int numberOfBalls() {
         return balls.size();
     }
@@ -65,6 +63,7 @@ public class Level implements LevelInformation {
      *
      * @return int - speed.
      */
+    @Override
     public int paddleSpeed() {
         return this.paddleSpeed;
     }
@@ -74,6 +73,7 @@ public class Level implements LevelInformation {
      *
      * @return int - width of paddle.
      */
+    @Override
     public int paddleWidth() {
         return this.paddleWidth;
     }
@@ -83,6 +83,7 @@ public class Level implements LevelInformation {
      *
      * @return String - level name.
      */
+    @Override
     public String levelName() {
         return this.levelname;
     }
@@ -92,6 +93,7 @@ public class Level implements LevelInformation {
      *
      * @return Sprite - background.
      */
+    @Override
     public Visitable getBackground() {
         return this.background;
     }
@@ -102,6 +104,7 @@ public class Level implements LevelInformation {
      *
      * @return List of blocks.
      */
+    @Override
     public List<Block> blocks() {
         return this.blocks;
     }
@@ -112,6 +115,7 @@ public class Level implements LevelInformation {
      *
      * @return int - number of blocks to remove.
      */
+    @Override
     public int numberOfBlocksToRemove() {
         return this.blocks.size();
     }
@@ -121,6 +125,7 @@ public class Level implements LevelInformation {
      *
      * @return list of balls.
      */
+    @Override
     public List<Ball> balls() {
         return this.balls;
     }
@@ -130,6 +135,7 @@ public class Level implements LevelInformation {
      *
      * @return Colour.
      */
+    @Override
     public Color countDownColour() {
         return this.color;
     }

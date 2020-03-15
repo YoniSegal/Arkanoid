@@ -142,7 +142,7 @@ public class Ball implements Visitable {
      * @param dt     change in time.
      * @return boolean - true if ball collides.
      */
-    public boolean checkTrajectory(Point newPos, double dt) {
+    private boolean checkTrajectory(Point newPos, double dt) {
         Velocity speed = this.getVelocity();
         //Calculate trajectory of object.
         Line trajectory = new Line(this.getCentre(), newPos);
@@ -199,6 +199,7 @@ public class Ball implements Visitable {
      *
      * @param dt change in time.
      */
+    @Override
     public void timePassed(double dt) {
         moveOneStep(dt);
     }

@@ -11,9 +11,7 @@ import gamelogic.Visitor;
  * @author Yonatan Segal
  * @version 1
  */
-public class LivesIndicator implements Visitable {
-    private Counter lives;
-    private Block upperBlock;
+public class LivesIndicator extends Indicator {
 
     /**
      * Constructor assigns a counter for the number of lives, and the upper block.
@@ -22,36 +20,11 @@ public class LivesIndicator implements Visitable {
      * @param upperBlock Block.
      */
     public LivesIndicator(Counter lives, Block upperBlock) {
-        this.lives = lives;
-        this.upperBlock = upperBlock;
+        super(lives, upperBlock);
     }
 
     public Counter getLives() {
-        return lives;
-    }
-
-    public Block getUpperBlock() {
-        return upperBlock;
-    }
-
-
-    /**
-     * Method adds block as a gameobjects.Sprite and a gameobjects.Collidable to the gameLevel.
-     *
-     * @param gameLevel GameLogic.GameLevel - gameLevel being played.
-     */
-    public void addToGame(GameLevel gameLevel) {
-        gameLevel.addVisitable(this);
-    }
-
-
-    /**
-     * Method notifies the sprite that time has passed.
-     *
-     * @param dt change in time.
-     */
-    public void timePassed(double dt) {
-
+        return counter;
     }
 
     @Override

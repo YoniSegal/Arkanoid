@@ -42,10 +42,6 @@ public class Ass6Game {
             put(Tasks.SHOW_SUB_MENU, new ShowSubMenuTask(runner, filePath));
         }};
 
-//        InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(filePath);
-//        Reader reader = new InputStreamReader(is);
-
-
         //Assign menu.
         menu.addSelection("s", "Start game", map.get(Tasks.SHOW_SUB_MENU));
         menu.addSelection("h", "Hi scores", showHighScoresTask);
@@ -66,9 +62,8 @@ public class Ass6Game {
      *
      * @param args String.
      * @return Reader.
-     * @throws FileNotFoundException - if file can't be found.
      */
-    public static String checkArgs(String[] args) throws FileNotFoundException {
+    private static String checkArgs(String[] args) {
         String filePath = null;
         if (args.length != 0) {
             filePath = args[0];

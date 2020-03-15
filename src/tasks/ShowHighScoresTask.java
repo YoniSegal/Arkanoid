@@ -52,6 +52,7 @@ public class ShowHighScoresTask extends BaseTask {
      *
      * @return null.
      */
+    @Override
     public Void run() {
         this.runner.run(this.highScoreAnimation);
         return null;

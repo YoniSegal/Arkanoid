@@ -53,7 +53,7 @@ public class LineCompare {
         return betweenLine1x && betweenLine2x && betweenLine1y && betweenLine2y;
     }
 
-    public Point verticalIntersection(Line vertical, Line regular) {
+    private Point verticalIntersection(Line vertical, Line regular) {
         double x = vertical.getStart().getX();
         double y = regular.getEquation().getGradient() * x + regular.getEquation().getyIntercept();
         return new Point(x, y);

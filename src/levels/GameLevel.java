@@ -1,8 +1,8 @@
 package levels;
 
-import animations.Animation;
 import animations.AnimationRunner;
 import animations.CountdownAnimation;
+import animations.StoppableAnimation;
 import gamelogic.*;
 import gameobjects.*;
 import geometry.Point;
@@ -19,7 +19,7 @@ import java.util.List;
  * @author Yonatan Segal
  * @version 1
  */
-public class GameLevel implements Animation {
+public class GameLevel extends StoppableAnimation {
     private static final int MAX_WIDTH = 800;
     private static final int MAX_HEIGHT = 600;
     private static final int RECT_HEIGHT = 40;
@@ -27,7 +27,6 @@ public class GameLevel implements Animation {
     private int numOfBalls;
     private VisitableCollection visitableCollection;
     private CollidableCollection collidableCollection;
-    //    private GUI gui;
     private Counter blocksRemaining;
     private Counter ballsRemaining;
     private Counter score;
@@ -59,16 +58,12 @@ public class GameLevel implements Animation {
         this.score = score;
     }
 
-    public Color getCountDownColour() {
-        return countDownColour;
-    }
-
     /**
      * Method assign the number of blocks remaining in a level.
      *
      * @param blocks Counter.
      */
-    public void setBlocksRemaining(Counter blocks) {
+    private void setBlocksRemaining(Counter blocks) {
         this.blocksRemaining = blocks;
     }
 
@@ -95,7 +90,7 @@ public class GameLevel implements Animation {
      *
      * @param numBalls Counter.
      */
-    public void setBallsRemaining(Counter numBalls) {
+    private void setBallsRemaining(Counter numBalls) {
         this.ballsRemaining = numBalls;
     }
 
@@ -115,15 +110,6 @@ public class GameLevel implements Animation {
      */
     public void removeCollidable(Collidable c) {
         this.collidableCollection.getCollidables().remove(c);
-    }
-
-    /**
-     * Method sets the lives left in a given level.
-     *
-     * @param l Counter.
-     */
-    public void setLives(Counter l) {
-        this.lives = l;
     }
 
     /**
@@ -169,7 +155,6 @@ public class GameLevel implements Animation {
         List<Block> walls = createWalls();
         //Assign top and bottom blocks.
         Block upperBlock = new Block(new Point(0, 0), MAX_WIDTH, 3 * BORDER_GAP);
-//        Block deathRegion = walls.get(1);
         //Add score indicator.
         ScoreIndicator scoreIndicator = new ScoreIndicator(this.score, upperBlock);
         scoreIndicator.addToGame(this);
@@ -195,15 +180,6 @@ public class GameLevel implements Animation {
         return !this.running;
     }
 
-    /**
-     * Method assigns stopping condition for animation.
-     *
-     * @param stop - boolean.
-     */
-    @Override
-    public void setStop(boolean stop) {
-
-    }
 
     /**
      * Method determines the drawing logic.
@@ -227,13 +203,9 @@ public class GameLevel implements Animation {
             this.running = false;
         }
         if (this.keyboardSensor.isPressed("p")) {
-            this.animationRunner.run(new PauseScreen(this.keyboardSensor));
+            this.animationRunner.run(new PauseScreen());
         }
         visitableCollection.notifyAllTimePassed(dt);
-    }
-
-    public VisitableCollection getVisitableCollection() {
-        return visitableCollection;
     }
 
     /**
@@ -254,7 +226,7 @@ public class GameLevel implements Animation {
     /**
      * Method removes the paddle and balls from the game.
      */
-    public void removePaddleAndBalls() {
+    private void removePaddleAndBalls() {
         removeVisitable(this.paddle);
         removeCollidable(this.paddle);
         visitableCollection.getVisitables().removeAll(this.balls);
@@ -263,7 +235,7 @@ public class GameLevel implements Animation {
     /**
      * Method creates new balls and a new paddle.
      */
-    public void newBallsAndPaddle() {
+    private void newBallsAndPaddle() {
         //Create balls.
         createBall();
         for (int k = 0; k < numOfBalls; k++) {
@@ -280,7 +252,7 @@ public class GameLevel implements Animation {
      *
      * @param colourBackground ColourBackground.
      */
-    public void addBackground(Background colourBackground) {
+    private void addBackground(Background colourBackground) {
         this.addVisitable(colourBackground);
     }
 
@@ -289,7 +261,7 @@ public class GameLevel implements Animation {
      *
      * @return List of walls.
      */
-    public List<Block> createWalls() {
+    private List<Block> createWalls() {
         List<Block> walls = new ArrayList<Block>();
         Point topBlock = new Point(0, 30);
         Point lowerBlock = new Point(BORDER_GAP, MAX_HEIGHT - BORDER_GAP);
@@ -312,7 +284,7 @@ public class GameLevel implements Animation {
     /**
      * Method creates game's balls.
      */
-    public void createBall() {
+    private void createBall() {
         //Create new Ball.
         this.balls = levelInformation.balls();
         for (Ball ball : balls) {
@@ -325,7 +297,7 @@ public class GameLevel implements Animation {
      *
      * @return gameobjects.Paddle.
      */
-    public Paddle createPaddle() {
+    private Paddle createPaddle() {
         //Assign keyboard sensor
         int paddleWidth = levelInformation.paddleWidth();
         Point point = new Point((double) MAX_WIDTH / 2 - (paddleWidth / 2), MAX_HEIGHT - (RECT_HEIGHT / 2));

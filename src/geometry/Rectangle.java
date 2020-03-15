@@ -1,8 +1,5 @@
 package geometry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * geometry.Rectangle has corner points and lines connecting them.
  *
@@ -13,11 +10,6 @@ public class Rectangle {
     private Point upperLeft;
     private double width;
     private double height;
-
-    private Point upperRight;
-    private Point lowerLeft;
-    private Point lowerRight;
-
     private Line left;
     private Line right;
     private Line top;
@@ -48,9 +40,6 @@ public class Rectangle {
      */
     private Rectangle(Point upperLeft, Point upperRight, Point lowerLeft, Point lowerRight) {
         this.upperLeft = upperLeft;
-        this.upperRight = upperRight;
-        this.lowerLeft = lowerLeft;
-        this.lowerRight = lowerRight;
         //Set top line.
         this.top = new Line(upperLeft, upperRight);
         //Set bottom line.

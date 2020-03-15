@@ -38,7 +38,7 @@ public class LineRectangleCompare extends LineCompare {
      * @param line geometry.Line.
      * @return List of points.
      */
-    public List<Point> intersectionPoints(Line line, Rectangle rectangle) {
+    private List<Point> intersectionPoints(Line line, Rectangle rectangle) {
         List<Point> points = new ArrayList<>();
 
         //Check if array hits top of rectangle.

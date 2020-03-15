@@ -26,7 +26,7 @@ public class CountdownAnimation extends StoppableAnimation {
      * @param numOfSeconds        double.
      * @param countFrom           int.
      * @param color               Colour.
-     * @param visitableCollection
+     * @param visitableCollection visitable collection
      */
     public CountdownAnimation(double numOfSeconds, int countFrom, Color color, VisitableCollection visitableCollection) {
         this.numOfSeconds = numOfSeconds;

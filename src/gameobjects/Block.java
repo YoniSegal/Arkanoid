@@ -23,8 +23,6 @@ public class Block implements Visitable, Collidable, HitNotifier {
     private Color colour;
     private List<HitListener> hitListeners = new ArrayList<>();
     private Counter hitsRemaining;
-//    private Map<String, ColourBackground> colourBackgroundMap = new HashMap<>();
-//    private Map<String, ImageBackground> imageBackgroundMap = new HashMap<>();
     private Map<Integer, Background> fill;
     private Color stroke;
     private String symbol;
@@ -82,6 +80,7 @@ public class Block implements Visitable, Collidable, HitNotifier {
      *
      * @return geometry.Rectangle.
      */
+    @Override
     public Rectangle getCollisionRectangle() {
         return this.rectangle;
     }
@@ -94,6 +93,7 @@ public class Block implements Visitable, Collidable, HitNotifier {
      * @param hitter          Ball.
      * @return GameLogic.Velocity - new velocity.
      */
+    @Override
     public Velocity hit(Ball hitter, Point collisionPoint, Velocity currentVelocity) {
         Velocity newVelocity = getNewVelocity(collisionPoint, currentVelocity);
         this.notifyHit(hitter);
@@ -189,6 +189,7 @@ public class Block implements Visitable, Collidable, HitNotifier {
      *
      * @param dt change in time.
      */
+    @Override
     public void timePassed(double dt) {
 
     }
@@ -198,6 +199,7 @@ public class Block implements Visitable, Collidable, HitNotifier {
      *
      * @param hl GameLogic.HitListener.
      */
+    @Override
     public void addHitListener(HitListener hl) {
         this.hitListeners.add(hl);
     }
@@ -207,27 +209,10 @@ public class Block implements Visitable, Collidable, HitNotifier {
      *
      * @param hl GameLogic.HitListener.
      */
+    @Override
     public void removeHitListener(HitListener hl) {
         this.hitListeners.remove(hl);
     }
-
-//    /**
-//     * Method sets Map.
-//     *
-//     * @param c map.
-//     */
-//    public void setColourBackgroundMap(Map<String, ColourBackground> c) {
-//        this.colourBackgroundMap = c;
-//    }
-//
-//    /**
-//     * Method sets map.
-//     *
-//     * @param i map.
-//     */
-//    public void setImageBackgroundMap(Map<String, ImageBackground> i) {
-//        this.imageBackgroundMap = i;
-//    }
 
     /**
      * Method sets fill.

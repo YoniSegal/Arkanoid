@@ -14,9 +14,7 @@ import java.util.List;
  * @version 1
  */
 public class ScoreTrackingListener extends CounterHitListener {
-//    private Counter counter;
-//    private GameLevel gameLevel;
-    private List<HitListener> hitListeners = new ArrayList();
+    private List<HitListener> hitListeners = new ArrayList<>();
 
     /**
      * Constructor assigns a counter to keep track of the score and a game level.
@@ -25,18 +23,7 @@ public class ScoreTrackingListener extends CounterHitListener {
      * @param gameLevel    GameLevel.
      */
     public ScoreTrackingListener(Counter currentScore, GameLevel gameLevel) {
-        super(currentScore,gameLevel);
-//        this.counter = currentScore;
-//        this.gameLevel = gameLevel;
-    }
-
-    /**
-     * Remove hl from the list of listeners to hit events.
-     *
-     * @param hl GameLogic.HitListener.
-     */
-    public void removeHitListener(HitListener hl) {
-        this.hitListeners.remove(hl);
+        super(currentScore, gameLevel);
     }
 
     /**
@@ -46,6 +33,7 @@ public class ScoreTrackingListener extends CounterHitListener {
      * @param beingHit gameobjects.Block being hit.
      * @param hitter   gameobjects.Ball hitting.
      */
+    @Override
     public void hitEvent(Block beingHit, Ball hitter) {
         //hitting block - 5 points
         //destroying block - 10 points
@@ -57,5 +45,14 @@ public class ScoreTrackingListener extends CounterHitListener {
             this.counter.increase(10);
             removeHitListener(this);
         }
+    }
+
+    /**
+     * Remove hl from the list of listeners to hit events.
+     *
+     * @param hl GameLogic.HitListener.
+     */
+    public void removeHitListener(HitListener hl) {
+        this.hitListeners.remove(hl);
     }
 }

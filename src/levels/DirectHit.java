@@ -2,7 +2,6 @@ package levels;
 
 import gamelogic.Velocity;
 import gamelogic.Visitable;
-import gamelogic.Visitor;
 import gameobjects.Background;
 import gameobjects.Ball;
 import gameobjects.Block;

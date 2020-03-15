@@ -22,14 +22,6 @@ public interface LevelInformation {
      * @return int number of balls in the level.
      */
     int numberOfBalls();
-//
-//    /**
-//     * Method returns the initial velocity of each ball. Note that
-//     * initialBallVelocities().size() == numberOfBalls().
-//     *
-//     * @return list of velocities.
-//     */
-//    List<Velocity> initialBallVelocities();
 
     /**
      * Method returns the speed of the paddle.

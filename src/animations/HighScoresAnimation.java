@@ -21,8 +21,6 @@ import static biuoop.KeyboardSensor.SPACE_KEY;
  */
 public class HighScoresAnimation extends StoppableAnimation {
     private HighScoresTable scores;
-    //private KeyboardSensor keyboard;
-    //    private AnimationRunner ar;
     private static final int MAX_WIDTH = 800;
 
     /**
@@ -32,8 +30,6 @@ public class HighScoresAnimation extends StoppableAnimation {
      */
     public HighScoresAnimation(HighScoresTable scores) {
         this.scores = scores;
-        //this.keyboard = ar.getGui().getKeyboardSensor();
-//        this.ar = ar;
     }
 
     /**

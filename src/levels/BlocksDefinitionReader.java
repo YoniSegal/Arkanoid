@@ -78,7 +78,7 @@ public class BlocksDefinitionReader {
      * @param blockMaker        current blockmaker.
      * @param defaultBlockMaker default blockmaker.
      */
-    public static void checkBlockMaker(BlockMaker blockMaker, BlockMaker defaultBlockMaker) {
+    private static void checkBlockMaker(BlockMaker blockMaker, BlockMaker defaultBlockMaker) {
         if (blockMaker.getWidth() == 0) {
             blockMaker.setWidth(defaultBlockMaker.getWidth());
         }
@@ -103,7 +103,7 @@ public class BlocksDefinitionReader {
      * @param blockMaker blockMaker.
      * @return Blockmaker.
      */
-    public static BlockMaker defaultBlock(String line, BlockMaker blockMaker) {
+    private static BlockMaker defaultBlock(String line, BlockMaker blockMaker) {
         Map<String, String> map = new HashMap<>();
         String[] parts = line.split(" ");
         for (int j = 1; j < parts.length; j++) {
@@ -124,7 +124,7 @@ public class BlocksDefinitionReader {
      * @param blockMaker blockMaker.
      * @return Blockmaker.
      */
-    public static BlockMaker definedBlock(String line, BlockMaker blockMaker) {
+    private static BlockMaker definedBlock(String line, BlockMaker blockMaker) {
         String[] parts = line.split("bdef ");
         Map<String, String> map = splitByDef(parts[1]);
         checkMap(map, blockMaker, line);
@@ -137,7 +137,7 @@ public class BlocksDefinitionReader {
      * @param line String.
      * @return Map.
      */
-    public static Map<String, Integer> getSpacerDefs(String line) {
+    private static Map<String, Integer> getSpacerDefs(String line) {
         Map<String, Integer> spacers = new HashMap<>();
         String[] parts = line.split("sdef |\n");
         for (int i = 1; i < parts.length; i++) {
@@ -155,7 +155,7 @@ public class BlocksDefinitionReader {
      * @param s String.
      * @return int.
      */
-    public static int readInt(String s) {
+    private static int readInt(String s) {
         return Integer.parseInt(s);
     }
 
@@ -165,7 +165,7 @@ public class BlocksDefinitionReader {
      * @param s String.
      * @return Background.
      */
-    public static Background readBackground(String s) {
+    private static Background readBackground(String s) {
         Map<Integer, Background> hitFillMap = new HashMap<>();
         if (s.contains("color")) {
             ColorsParser colorsParser = new ColorsParser();
@@ -185,7 +185,7 @@ public class BlocksDefinitionReader {
      * @param s String.
      * @return map.
      */
-    public static Map splitByDef(String s) {
+    private static Map splitByDef(String s) {
         String[] parts = s.split(" ");
         Map<String, String> map = new HashMap<>();
         for (int i = 0; i < parts.length; i++) {
@@ -202,7 +202,7 @@ public class BlocksDefinitionReader {
      * @param blockMaker blockmaker.
      * @param line       Stirng.
      */
-    public static void checkMap(Map<String, String> map, BlockMaker blockMaker, String line) {
+    private static void checkMap(Map<String, String> map, BlockMaker blockMaker, String line) {
         ColorsParser toColor = new ColorsParser();
 
         if (map.containsKey("height")) {
@@ -232,7 +232,7 @@ public class BlocksDefinitionReader {
      * @param blockMaker blockmaker.
      * @param map        map.
      */
-    public static void checkFill(String s, BlockMaker blockMaker, Map<String, String> map) {
+    private static void checkFill(String s, BlockMaker blockMaker, Map<String, String> map) {
         String[] split = s.split(" ");
         Map<Integer, Background> fillHitMap = new HashMap<>();
         for (int i = 0; i < split.length; i++) {

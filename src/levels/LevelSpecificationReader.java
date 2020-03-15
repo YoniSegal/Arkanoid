@@ -52,7 +52,7 @@ public class LevelSpecificationReader {
         try {
             Level level = new Level();
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            while (bufferedReader.readLine() != null) {
                 while ((line = bufferedReader.readLine()) != "END_LEVEL") {
                     if (line.contains("START_BLOCKS")) {
                         while ((line = bufferedReader.readLine()) != "END_BLOCKS") {
@@ -93,7 +93,7 @@ public class LevelSpecificationReader {
      * @param s String.
      * @return int.
      */
-    public int readInt(String s) {
+    private int readInt(String s) {
         String[] parts = s.split(":|\n");
         String num = parts[1];
         return Integer.parseInt(num);
@@ -105,7 +105,7 @@ public class LevelSpecificationReader {
      * @param s String.
      * @return Background.
      */
-    public Background readBackground(String s) {
+    private Background readBackground(String s) {
         if (s.contains("color")) {
             ColorsParser colorsParser = new ColorsParser();
             Color color = colorsParser.colorFromString(s);
@@ -124,7 +124,7 @@ public class LevelSpecificationReader {
      * @param line  String.
      * @param level Level.
      */
-    public void checkLine(String line, Level level) {
+    private void checkLine(String line, Level level) {
         if (line.contains("# Level")) {
             level.setLevelNumber(readLevelNumber(line));
         }
@@ -178,15 +178,14 @@ public class LevelSpecificationReader {
      * @param line String.
      * @return BlocksFromSymbolsFactory.
      */
-    public BlocksFromSymbolsFactory getFactory(String line) {
+    private BlocksFromSymbolsFactory getFactory(String line) {
         String[] parts = line.split(":|\n");
         String filePath = parts[1];
         BlocksDefinitionReader blocksDefinitionReader = new BlocksDefinitionReader();
         try {
 
             InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(filePath);
-            InputStreamReader inputStreamReader = new InputStreamReader(is);
-            Reader reader = inputStreamReader;
+            Reader reader = new InputStreamReader(is);
             BlocksFromSymbolsFactory blocksFromSymbolsFactory = blocksDefinitionReader.fromReader(reader);
             return blocksFromSymbolsFactory;
 
@@ -206,8 +205,8 @@ public class LevelSpecificationReader {
      * @param rowHeight       int.
      * @return List of blocks.
      */
-    public static List<Block> readBlocks(List<String> symbolsFromFile, BlocksFromSymbolsFactory blocksFactory,
-                                         int xpos, int ypos, int rowHeight) {
+    private static List<Block> readBlocks(List<String> symbolsFromFile, BlocksFromSymbolsFactory blocksFactory,
+                                          int xpos, int ypos, int rowHeight) {
         List<Block> blocks = new ArrayList<>();
         int width = 0;
         int height = 0;
@@ -234,7 +233,7 @@ public class LevelSpecificationReader {
      * @param line String.
      * @return int.
      */
-    public int readLevelNumber(String line) {
+    private int readLevelNumber(String line) {
         String[] parts = line.split("# Level ");
         return Integer.parseInt(parts[1]);
     }
@@ -245,7 +244,7 @@ public class LevelSpecificationReader {
      * @param line String.
      * @return String.
      */
-    public String readLevelName(String line) {
+    private String readLevelName(String line) {
         String[] parts = line.split(":");
         return parts[1];
     }
@@ -256,12 +255,12 @@ public class LevelSpecificationReader {
      * @param line String.
      * @return List.
      */
-    public List<Velocity> readVelocities(String line) {
+    private List<Velocity> readVelocities(String line) {
         List<Velocity> velocities = new ArrayList<>();
         String[] parts = line.split(":");
         String[] pairs = parts[1].split(" ");
-        for (int i = 0; i < pairs.length; i++) {
-            String[] parameters = pairs[i].split(",");
+        for (String pair : pairs) {
+            String[] parameters = pair.split(",");
             double speed = Double.parseDouble(parameters[0]);
             double angle = Double.parseDouble(parameters[1]);
             velocities.add(Velocity.fromAngleAndSpeed(speed, angle));
@@ -275,11 +274,11 @@ public class LevelSpecificationReader {
      * @param velocities List of velocities.
      * @return List of balls.
      */
-    public List<Ball> readBalls(List<Velocity> velocities) {
+    private List<Ball> readBalls(List<Velocity> velocities) {
         List<Ball> balls = new ArrayList<>();
-        for (int i = 0; i < velocities.size(); i++) {
+        for (Velocity velocity : velocities) {
             Ball ball = new Ball(MAX_WIDTH / 2, MAX_HEIGHT - RECT_WIDTH, 5, Color.WHITE);
-            ball.setVelocity(velocities.get(i));
+            ball.setVelocity(velocity);
             balls.add(ball);
         }
         return balls;
